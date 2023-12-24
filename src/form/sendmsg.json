@@ -1,5 +1,9 @@
 {
-    "field1": "j",
-    "field2": "h",
-    "field3": "pöl"
+    "matrikelnummer": "123456789",
+    "vorname": "Max",
+    "nachname": "Mustermann",
+    "email": "mm@iu.de",
+    "kursabkuerzung": "ISSE01",
+    "medium": "Gedrucktes Skript",
+    "fehlerbeschreibung": "Fehlerbeschreibung"
 }

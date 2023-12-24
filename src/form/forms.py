@@ -1,6 +1,11 @@
 from django import forms
 
-class MyForm(forms.Form):
-    field1 = forms.CharField(label='Name', max_length=100)
-    field2 = forms.CharField(label='Vorname', max_length=100)
-    field3 = forms.CharField(label='Hier können Sie sich ausheulen:', max_length=100)
+class FehlermeldungForm(forms.Form):
+    matrikelnummer = forms.CharField(label='Matrikelnummer', max_length=100, initial='123456789',)
+    vorname = forms.CharField(label='Vorname', max_length=100, initial='Max')
+    nachname = forms.CharField(label='Nachname', max_length=100, initial='Mustermann')
+    email = forms.EmailField(label='Email', initial='mm@iu.de')
+    kursabkuerzung = forms.CharField(label='Kursabkürzung', max_length=100, initial='ISSE01')
+    medium = forms.CharField(label='Medium', max_length=100, initial='Gedrucktes Skript')
+    fehlerbeschreibung = forms.CharField(label='Fehlerbeschreibung', widget=forms.Textarea, initial='Fehlerbeschreibung')
+
