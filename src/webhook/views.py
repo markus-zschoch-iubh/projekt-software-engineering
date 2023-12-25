@@ -1,22 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
-from .models import Fehlermeldung
+from webhook.models import Fehlermeldung
+from webhook.forms import FehlermeldungEditForm
 
 
 @csrf_exempt
 #@require_http_methods(["POST"])
 def webhook(request):
+
     if request.method == 'POST':
-        try:
-            # Testweise den HTML Body der Nachricht schreiben
-            # with open ("webhook/inbox.json" , "a") as inbox:
-            #     inbox.write(str(request.body))
-            #     inbox.write(str("\n"))
-            
+
+        try:         
             data = json.loads(request.body)
             #Hier können Sie die empfangenen Daten verarbeiten
             #Testweise aus HTML Body extrahierte JSON Daten schreiben
@@ -25,7 +23,8 @@ def webhook(request):
                 json.dump(data, inbox, ensure_ascii=False, indent=4)
             print("Webhook return follows")
 
-            fehler = Fehlermeldung.objects.create(
+            neue_meldung = Fehlermeldung.objects.create(
+                #id=data['id'],
                 matrikelnummer=data['matrikelnummer'],
                 vorname=data['vorname'],
                 nachname=data['nachname'],
@@ -35,7 +34,8 @@ def webhook(request):
                 fehlerbeschreibung=data['fehlerbeschreibung']
             )            
             
-            return JsonResponse({"status": "Erfolgreich empfangen"}, status=200)
+            return redirect('bestaetigungsseite', id=neue_meldung.id)
+            #return JsonResponse({"status": "Erfolgreich empfangen"}, status=200)
                     
         except json.JSONDecodeError:
             return JsonResponse({"error": "Ungültiges JSON"}, status=400)
@@ -45,3 +45,18 @@ def webhook(request):
 def fehler_list_view(request):
     fehler = Fehlermeldung.objects.all()  # Alle Einträge aus der Tabelle Fehlermeldung holen
     return render(request, 'fehlertabelle.html', {'fehler': fehler})
+
+def fehler_edit_view(request, id):
+    fehler = get_object_or_404(Fehlermeldung, id=id)
+    if request.method == 'POST':
+        form = FehlermeldungEditForm(request.POST, instance=fehler)
+        if form.is_valid():
+            form.save()
+            return redirect('fehlerliste')
+    else:
+        form = FehlermeldungEditForm(instance=fehler)
+    return render(request, 'fehler_edit.html', {'form': form})
+
+def bestaetigungsseite_view(request, id):
+    fehler = get_object_or_404(Fehlermeldung, id=id)
+    return render(request, 'bestaetigung.html', {'fehler': fehler})

@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import FehlermeldungForm
 import json
 import requests
+from form.forms import FehlermeldungForm
 
-def index(request):
+def fehler_melden(request):
     if request.method == 'POST':
         form = FehlermeldungForm(request.POST)
         if form.is_valid():
@@ -26,7 +26,9 @@ def index(request):
                 print("POST Error " + str(e))
 
     else:
+        print('!' * 200)
         form = FehlermeldungForm()
 
     return render(request, 'my_template.html', {'form': form})
+
 

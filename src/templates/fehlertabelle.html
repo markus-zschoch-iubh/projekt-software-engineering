@@ -22,6 +22,9 @@
         <td>{{ fehler.medium }}</td>
         <td>{{ fehler.fehlerbeschreibung }}</td>
     </tr>
+    <tr>
+        <td><a href="{% url 'fehler_bearbeiten' fehler.id %}">Bearbeiten</a></td>
+    </tr>
     {% endfor %}
 </table>
 {% endblock %}

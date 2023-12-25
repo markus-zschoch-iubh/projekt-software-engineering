@@ -1,9 +1,9 @@
 {
-    "matrikelnummer": "123456789",
-    "vorname": "Max5",
+    "matrikelnummer": "3",
+    "vorname": "Max",
     "nachname": "Mustermann",
     "email": "mm@iu.de",
     "kursabkuerzung": "ISSE01",
-    "medium": "Gedrucktes Skript",
+    "medium": "druck",
     "fehlerbeschreibung": "Fehlerbeschreibung"
 }
