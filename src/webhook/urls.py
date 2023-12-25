@@ -1,12 +1,8 @@
 from django.urls import path
-
 from . import views
 
 urlpatterns = [
-    path('', views.webhook)
-    #path('', views.index)
+    #path('', views.webhook, name='webhook'),
+    path('', views.webhook),
+    path('fehlerliste/', views.fehler_list_view, name='fehlerliste')
 ]
-
-# urlpatterns = [
-#     path('webhook/', webhook, name='webhook')
-# ]

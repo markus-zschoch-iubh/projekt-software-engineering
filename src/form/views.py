@@ -2,25 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import FehlermeldungForm
 import json
-
-# Create your views here.
-#def index(request):
-#    return HttpResponse("Hier entsteht das Formular zur Korrekturmedlung.")
-
-
-# Create your views here.
-# def index(request):
-    
-#     if request.method == 'POST':
-#         form = MyForm(request.POST)
-#         if form.is_valid():
-#             # Hier können Sie die validierten Daten verarbeiten
-#             pass
-#     else:
-#         form = MyForm()
-
-#     return render(request, 'my_template.html', {'form': form})
-
 import requests
 
 def index(request):
