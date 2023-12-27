@@ -14,7 +14,17 @@ class Fehlermeldung(models.Model):
     def __str__(self):
         return self.matrikelnummer
     
+class KursmaterialEnum(models.TextChoices):
+    GEDRUCKTES_SKRIPT = '01', 'Gedrucktes Skript'
+    PDF_SKRIPT = '02', 'PDF Skript'
+    IU_LEARN_WEB = '03', 'IU Learn (Web)'
+    IU_LEARN_IPHONE = '04', 'IU Learn (iPhone)'
+    IU_LEARN_ANDROID = '05', 'IU Learn (Android)'
+    PODCAST = '06', 'Podcast'
+    VIDEO = '07', 'Video'
+    SONSTIGES_ALLGEMEIN = '08', 'Sonstiges/Allgemein'
 
+    
 # Student model
 class Student(models.Model):
     martrikelnummer = models.IntegerField(primary_key=True)
