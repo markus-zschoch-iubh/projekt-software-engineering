@@ -3,7 +3,7 @@
 
 ### App #######################################################################
 
-public/*
+# public/* # Files in public needed.
 !public/.keep
 public_collected/*
 !public_collected/.keep
