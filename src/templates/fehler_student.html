@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Fehlermeldungen für Matrikelnummer: {{ matrikelnummer }}</h2>
+    <ul>
+        {% for fehler in fehlermeldungen %}
+            <li>{{ fehler.fehlerbeschreibung }} (Kurs: {{ fehler.kursabkuerzung }})</li>
+        {% empty %}
+            <li>Keine Fehlermeldungen gefunden.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
