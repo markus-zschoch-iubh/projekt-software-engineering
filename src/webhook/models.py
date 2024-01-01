@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Fehlermeldung(models.Model):
     matrikelnummer = models.CharField(max_length=100)
     vorname = models.CharField(max_length=100)
@@ -13,18 +14,19 @@ class Fehlermeldung(models.Model):
 
     def __str__(self):
         return self.matrikelnummer
-    
-class KursmaterialEnum(models.TextChoices):
-    GEDRUCKTES_SKRIPT = '01', 'Gedrucktes Skript'
-    PDF_SKRIPT = '02', 'PDF Skript'
-    IU_LEARN_WEB = '03', 'IU Learn (Web)'
-    IU_LEARN_IPHONE = '04', 'IU Learn (iPhone)'
-    IU_LEARN_ANDROID = '05', 'IU Learn (Android)'
-    PODCAST = '06', 'Podcast'
-    VIDEO = '07', 'Video'
-    SONSTIGES_ALLGEMEIN = '08', 'Sonstiges/Allgemein'
 
-    
+
+class KursmaterialEnum(models.TextChoices):
+    GEDRUCKTES_SKRIPT = "01", "Gedrucktes Skript"
+    PDF_SKRIPT = "02", "PDF Skript"
+    IU_LEARN_WEB = "03", "IU Learn (Web)"
+    IU_LEARN_IPHONE = "04", "IU Learn (iPhone)"
+    IU_LEARN_ANDROID = "05", "IU Learn (Android)"
+    PODCAST = "06", "Podcast"
+    VIDEO = "07", "Video"
+    SONSTIGES_ALLGEMEIN = "08", "Sonstiges/Allgemein"
+
+
 # Student model
 class Student(models.Model):
     martrikelnummer = models.IntegerField(primary_key=True)
@@ -37,6 +39,7 @@ class Student(models.Model):
         """String for representating the Model Object."""
         return self.martrikelnummer
 
+
 # Tutor model
 class Tutor(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -47,7 +50,8 @@ class Tutor(models.Model):
 
     def __str__(self):
         """String for representating the Model Object."""
-        return self.id  
+        return self.id
+
 
 # Kurs model
 class Kurs(models.Model):
@@ -58,6 +62,7 @@ class Kurs(models.Model):
     def __str__(self):
         """String for representating the Model Object."""
         return self.id
+
 
 # Korrektur model
 class Korrektur(models.Model):
@@ -82,6 +87,7 @@ class Kursmaterial(models.Model):
         """String for representating the Model Object."""
         return self.id
 
+
 # GedrucktesSkript model
 class GedrucktesSkript(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -93,6 +99,7 @@ class GedrucktesSkript(models.Model):
         """String for representating the Model Object."""
         return self.id
 
+
 # PDFSkript model
 class PDFSkript(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -103,6 +110,7 @@ class PDFSkript(models.Model):
     def __str__(self):
         """String for representating the Model Object."""
         return self.id
+
 
 # IULearnWeb model
 class IULearnWeb(models.Model):
@@ -116,6 +124,7 @@ class IULearnWeb(models.Model):
         """String for representating the Model Object."""
         return self.id
 
+
 # IULearnIPhone model
 class IULearnIPhone(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -127,6 +136,7 @@ class IULearnIPhone(models.Model):
     def __str__(self):
         """String for representating the Model Object."""
         return self.id
+
 
 # IULearnAndroid model
 class IULearnAndroid(models.Model):
@@ -140,6 +150,7 @@ class IULearnAndroid(models.Model):
         """String for representating the Model Object."""
         return self.id
 
+
 # Podcast model
 class Podcast(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -150,6 +161,7 @@ class Podcast(models.Model):
     def __str__(self):
         """String for representating the Model Object."""
         return self.id
+
 
 # Video model
 class Video(models.Model):
@@ -162,6 +174,7 @@ class Video(models.Model):
     def __str__(self):
         """String for representating the Model Object."""
         return self.id
+
 
 # AllgemeinSonstiges model
 class AllgemeinSonstiges(models.Model):
