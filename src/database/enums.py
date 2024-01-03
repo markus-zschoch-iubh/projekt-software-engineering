@@ -16,9 +16,15 @@ class KursmaterialEnum(models.TextChoices):
     VIDEO = "07", "Video"
     SONSTIGES_ALLGEMEIN = "08", "Sonstiges/Allgemein"
 
+    def __str__(self):
+        return self.label
+
 
 class KorrekturstatusEnum(models.TextChoices):
     OFFEN = "01", "Offen"
     BEARBEITUNG = "02", "In Bearbeitung"
     UMGESETZT = "03", "Umgesetzt"
     ABGELEHNT = "04", "Abgelehnt"
+
+    def __str__(self):
+        return self.label

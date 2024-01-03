@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block page_title%}Korrekturen{% endblock %}
+{% block content%}
+    <ul>
+        {% for korrektur in korrekturen %}
+            <li>Meldung für Kurs {{ korrektur.kurs }}, Kursmaterial {{ korrektur.kursmaterial }}. Ersteller: {{ korrektur.ersteller }}. Status: {{ korrektur.aktuellerStatus }}</li>
+        {% endfor %}
+    </ul>
+{% endblock%}

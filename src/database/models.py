@@ -18,7 +18,7 @@ class Kursmaterial(models.Model):
     kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.typ
+        return f"{self.typ} - {self.kurs}"
 
 
 class Student(models.Model):
@@ -53,7 +53,9 @@ class Tutor(models.Model):
 class Korrektur(models.Model):
     typ = models.CharField(max_length=2, choices=KursmaterialEnum.choices)
     ersteller = models.ForeignKey(Student, on_delete=models.CASCADE)
-    bearbeiter = models.ForeignKey(Tutor, on_delete=models.CASCADE)
+    bearbeiter = models.ForeignKey(
+        Tutor, on_delete=models.CASCADE, blank=True, null=True
+    )
     kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE)
     kursmaterial = models.ForeignKey(Kursmaterial, on_delete=models.CASCADE)
     aktuellerStatus = models.CharField(
@@ -68,7 +70,7 @@ class GedrucktesSkript(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # PDFSkript model
@@ -78,7 +80,7 @@ class PDFSkript(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # IULearnWeb model
@@ -90,7 +92,7 @@ class IULearnWeb(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # IULearnIPhone model
@@ -101,7 +103,7 @@ class IULearnIPhone(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # IULearnAndroid model
@@ -112,7 +114,7 @@ class IULearnAndroid(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # Podcast model
@@ -122,7 +124,7 @@ class Podcast(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # Video model
@@ -133,7 +135,7 @@ class Video(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # AllgemeinSonstiges model
@@ -142,4 +144,4 @@ class AllgemeinSonstiges(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.id)
