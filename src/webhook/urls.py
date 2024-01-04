@@ -17,6 +17,6 @@ urlpatterns = [
     path(
         "bestaetigung/<int:id>/",
         bestaetigungsseite_view,
-        name="bestaetigungsseite",
+        name="bestaetigung",
     ),
 ]

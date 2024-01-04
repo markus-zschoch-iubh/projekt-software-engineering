@@ -13,7 +13,7 @@ from webhook.models import Fehlermeldung
 
 
 @csrf_exempt
-# @require_http_methods(["POST"])
+@require_http_methods(["POST"])
 def webhook(request):
     if request.method == "POST":
         try:
@@ -35,9 +35,9 @@ def webhook(request):
                 medium=data["medium"],
                 fehlerbeschreibung=data["fehlerbeschreibung"],
             )
+            print("Neue Meldung eingegangen: " + str(data))
 
-            return redirect("bestaetigungsseite", id=neue_meldung.id)
-            # return JsonResponse({"status": "Erfolgreich empfangen"}, status=200)
+            return JsonResponse({"status": "Erfolgreich empfangen"}, status=200)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Ungültiges JSON"}, status=400)
