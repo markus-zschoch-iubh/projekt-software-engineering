@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import include
 from django.urls import path
 from messaging.views import CustomLoginView, tutor_dashboard, student_dashboard
+from messaging.views import CustomLogoutView
 
 
 urlpatterns = [
@@ -32,6 +33,7 @@ urlpatterns = [
     path('accounts/login/', CustomLoginView.as_view(template_name='registration/login.html'), name='login'),
     path('tutor_dashboard/', tutor_dashboard, name='tutor_dashboard'),
     path('student_dashboard/', student_dashboard, name='student_dashboard'),
+    path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
     
 ]
 
