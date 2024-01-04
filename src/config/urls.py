@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
+from django.contrib.auth.views import LoginView
+
 
 urlpatterns = [
     path("backend/", include("backend.urls")),
@@ -27,4 +29,9 @@ urlpatterns = [
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
+    
 ]
+
+

@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",  # noqa: E501
     },
 ]
-
+LOGIN_REDIRECT_URL = '/messaging/student_dashboard'
 # Sessions
 # https://docs.djangoproject.com/en/4.2/ref/settings/#sessions
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
