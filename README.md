@@ -1,5 +1,24 @@
 # An example Django + Docker app
 
+## Struktur des Projekts
+
+### Templates
+
+Im Verzeichnis `src/templates` werden App-übergreifende Templates gesammelt. Es gibt ein `base.html` Template, das eine einfache HTML Struktur enthählt, auf dem andere Templates aubauen können (`{% extends "base.html" %}`).
+
+Templates, die nur für eine App verwendet werden sollen, im `template`-Folder der jeweiligen App abgelegt. Dabei ist es Best-Practice, noch nicht direkt ins `template`-Vwerzeichnis zu speichern, sondern noch mal einen Unterordner zu erstellen, der wie die App heißt.
+
+Gibt es zusätlich noch weitere Includes (einzelne Codeblöcke, die wiederverwendet werden), werden diese an entsprechender Stelle in einem `includes`-Unterverzichnis abgelegt.
+
+### Static files, wie CSS oder JavaScript
+
+Diese Art von Dateien wird im Verzeichnis `/public` im jeweiligen Unterverzeichnis abgelegt. Per Default ist dieser Ordner in `.gitignore` eingetragen. Dies muss auskommentiert werden, da sonst die Dateien nicht zu GitHub synchronisiert werden.
+
+### Konfiguration
+
+Die Konfirguration des Projekts wird durch die Dateien im Verzeichnis `src/config` gemanaget. Dort liegen zum Beispiel die `settings.py` und die globale `urls.py`.
+
+
 ![CI](https://github.com/nickjj/docker-django-example/workflows/CI/badge.svg?branch=main)
 
 You could use this example app as a base for your new project or as a guide to
