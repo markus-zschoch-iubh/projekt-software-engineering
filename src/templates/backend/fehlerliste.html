@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Fehlermeldungen</h2>
+<table>
+    <tr>
+        <th>Matrikelnummer</th>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Email</th>
+        <th>Kursabkürzung</th>
+        <th>Medium</th>
+        <th>Fehlerbeschreibung</th>
+    </tr>
+    {% for fehler in fehler %}
+    <tr>
+        <td>{{ fehler.matrikelnummer }}</td>
+        <td>{{ fehler.vorname }}</td>
+        <td>{{ fehler.nachname }}</td>
+        <td>{{ fehler.email }}</td>
+        <td>{{ fehler.kursabkuerzung }}</td>
+        <td>{{ fehler.medium }}</td>
+        <td>{{ fehler.fehlerbeschreibung }}</td>
+    </tr>
+    <tr>
+        <td><a href="{% url 'fehler_bearbeiten' fehler.id %}">Bearbeiten</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

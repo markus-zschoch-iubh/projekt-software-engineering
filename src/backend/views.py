@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 
 # from django.http import HttpResponse
 
 # from django.http import HttpResponse
 
-from database.models import Korrektur, Tutor
+from database.models import Korrektur, Tutor, Fehlermeldung
+from backend.forms import FehlermeldungEditForm
 
 # Create your views here.
 
@@ -30,3 +31,27 @@ def tutor_index(request, tutor_id):
             "meine_korrekturen": meine_korrekturen,
         },
     )
+
+
+def fehler_list_view(request):
+    fehler = (
+        Fehlermeldung.objects.all()
+    )  # Alle Einträge aus der Tabelle Fehlermeldung holen
+    return render(request, "backend/fehlerliste.html", {"fehler": fehler})
+
+
+def fehler_edit_view(request, id):
+    fehler = get_object_or_404(Fehlermeldung, id=id)
+    if request.method == "POST":
+        form = FehlermeldungEditForm(request.POST, instance=fehler)
+        if form.is_valid():
+            form.save()
+            return redirect("fehlerliste")
+    else:
+        form = FehlermeldungEditForm(instance=fehler)
+    return render(request, "fehler_edit.html", {"form": form})
+
+
+def bestaetigungsseite_view(request, id):
+    fehler = get_object_or_404(Fehlermeldung, id=id)
+    return render(request, "bestaetigung.html", {"fehler": fehler})

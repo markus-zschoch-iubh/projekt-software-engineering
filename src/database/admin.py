@@ -15,6 +15,7 @@ from .models import (
     Student,
     StudentKurs,
     Tutor,
+    Fehlermeldung
 )
 
 # Register your models here.
@@ -32,3 +33,4 @@ admin.site.register(Kursmaterial)
 admin.site.register(Student)
 admin.site.register(StudentKurs)
 admin.site.register(Tutor)
+admin.site.register(Fehlermeldung)
