@@ -14,7 +14,7 @@ def index(request):
 # The Login View for the Tutors
 @login_required
 def tutor_dashboard(request):
-    return HttpResponse("This is the tutor Dashboard")
+    return HttpResponse("This is the Tutor Dashboard")
 
 #The Login View for the Students
 @login_required

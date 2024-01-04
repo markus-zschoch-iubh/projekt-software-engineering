@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
-from django.contrib.auth.views import LoginView
+from messaging.views import CustomLoginView, tutor_dashboard, student_dashboard
 
 
 urlpatterns = [
@@ -29,8 +29,9 @@ urlpatterns = [
     path("", include("pages.urls")),
     path("admin/", admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/login/', LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('accounts/login/', CustomLoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('tutor_dashboard/', tutor_dashboard, name='tutor_dashboard'),
+    path('student_dashboard/', student_dashboard, name='student_dashboard'),
     
 ]
 
