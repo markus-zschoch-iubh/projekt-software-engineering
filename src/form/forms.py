@@ -1,6 +1,7 @@
 from django import forms
 
 from database.models import Fehlermeldung
+from database.enums import KursmaterialEnum
 
 
 class FehlermeldungForm(forms.Form):
@@ -17,17 +18,12 @@ class FehlermeldungForm(forms.Form):
     kursabkuerzung = forms.CharField(
         label="Kursabkürzung", max_length=100, initial="ISSE01"
     )
-    # medium = forms.CharField(label='Medium', max_length=100, initial='Gedrucktes Skript')
-    MEDIUM_CHOICES = [
-        ("druck", "Druckskript"),
-        ("pdf", "PDF-Skript"),
-        ("video", "Video"),
-        ("app", "Lernapp"),
-    ]
+    MEDIUM_CHOICES = [(choice.value, choice.label) for choice in KursmaterialEnum]
 
     medium = forms.ChoiceField(choices=MEDIUM_CHOICES, label="Medium")
+
     fehlerbeschreibung = forms.CharField(
         label="Fehlerbeschreibung",
         widget=forms.Textarea,
-        initial="Fehlerbeschreibung",
+        initial="Bitte geben Sie hier eine möglichst genaue Fehlerbeschreibung ein.",
     )
