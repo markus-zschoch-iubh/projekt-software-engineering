@@ -49,9 +49,9 @@ def fehler_edit_view(request, id):
             return redirect("fehlerliste")
     else:
         form = FehlermeldungEditForm(instance=fehler)
-    return render(request, "fehler_edit.html", {"form": form})
+    return render(request, "backend/fehler_edit.html", {"form": form})
 
 
 def bestaetigungsseite_view(request, id):
     fehler = get_object_or_404(Fehlermeldung, id=id)
-    return render(request, "bestaetigung.html", {"fehler": fehler})
+    return render(request, "backend/bestaetigung.html", {"fehler": fehler})
