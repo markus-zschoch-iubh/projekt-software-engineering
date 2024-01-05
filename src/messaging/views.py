@@ -1,9 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-from django.contrib.auth.views import LogoutView
+from .forms import MessageForm
 
 
 # Create your views here.
@@ -37,5 +36,18 @@ class CustomLoginView(LoginView):
 # The Class for the log out view
 class CustomLogoutView(LogoutView):
     template_name = 'registration/logout.html' 
+
+
+
+# Chat View
+def chat_view(request):
+    form = MessageForm()
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message_text = form.cleaned_data['message']
+            # Logik zum Senden der Nachricht
+    return render(request, 'messaging/chat.html', {'form': form})
+
 
      
