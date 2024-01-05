@@ -50,8 +50,3 @@ def fehler_edit_view(request, id):
     else:
         form = FehlermeldungEditForm(instance=fehler)
     return render(request, "backend/fehler_edit.html", {"form": form})
-
-
-def bestaetigungsseite_view(request, id):
-    fehler = get_object_or_404(Fehlermeldung, id=id)
-    return render(request, "backend/bestaetigung.html", {"fehler": fehler})

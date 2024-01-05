@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}Bestätigung{% endblock %}
+
+{% block content %}
+        <h2>Vielen Dank für Ihre Fehlermeldung!</h2>
+        <p>Ihre Fehlermeldung wurde erfolgreich gespeichert. Sie werden über den Bearbeitungsstand informiert.</p>
+        <a href="{% url 'fehler_melden' %}">Zurück zur Fehlermeldung</a>
+{% endblock %}

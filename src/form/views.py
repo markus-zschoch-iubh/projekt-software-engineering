@@ -1,14 +1,38 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 import requests
 
 from form.forms import FehlermeldungForm
+from database.models import Fehlermeldung
 
 
 jheader = {"Content-Type": "application/json"}
 webhook_url = "http://localhost:8000/webhook/"
 
-
+# Funktion zum  direkten Speichern der Fehlermeldung in der DB
 def fehler_melden(request):
+    if request.method == 'POST':
+        form = FehlermeldungForm(request.POST)
+        if form.is_valid():
+            Fehlermeldung.objects.create(
+                matrikelnummer=form.cleaned_data['matrikelnummer'],
+                vorname=form.cleaned_data['vorname'],
+                nachname=form.cleaned_data['nachname'],
+                email=form.cleaned_data['email'],
+                kursabkuerzung=form.cleaned_data['kursabkuerzung'],
+                medium=form.cleaned_data['medium'],
+                fehlerbeschreibung=form.cleaned_data['fehlerbeschreibung']
+            )
+            return redirect('bestaetigung')
+
+    else:
+        print('!!!!!!!!!!!!!! Die Seite: "fehler_melden" wurde abgerufen !!!!!!!!!!!!!!')
+        form = FehlermeldungForm()
+
+    return render(request, "form/fehler_melden.html", {"form": form})
+
+
+### Funktion zum senden der Fehlermeldung an den Webhook
+def fehler_melden_an_webhook(request):
     if request.method == "POST":
         form = FehlermeldungForm(request.POST)
         if form.is_valid():
@@ -37,3 +61,7 @@ def fehler_melden(request):
         form = FehlermeldungForm()
 
     return render(request, "form/fehler_melden.html", {"form": form})
+
+
+def bestaetigungsseite_view(request):
+    return render(request, "form/bestaetigung.html")
