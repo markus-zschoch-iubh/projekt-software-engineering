@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from .forms import MessageForm
+from database.models import Student, Fehlermeldung
 
 
 # Create your views here.
@@ -17,9 +18,43 @@ def tutor_dashboard(request):
     return render(request, 'messaging/tutor_dashboard.html')
 
 #The Login View for the Students
+#@login_required
+#def student_dashboard(request):
+#    return render(request, 'messaging/student_dashboard.html')
+
+#Angepasstes Dashboard Student
 @login_required
 def student_dashboard(request):
-    return render(request, 'messaging/student_dashboard.html')
+    user = request.user
+    email = user.email
+    vorname = user.first_name
+    nachname = user.last_name
+    print("Erfolgreicher Login von " + vorname + nachname)
+
+    try:
+        # Den Studenten anhand der E-Mail finden
+        student = Student.objects.get(email=email)
+        # Matrikelnummer des Studenten erhalten
+        matrikelnummer = student.martrikelnummer
+    except Student.DoesNotExist:
+        # Behandlung, falls kein Student mit dieser E-Mail existiert
+        matrikelnummer = None
+
+    if  matrikelnummer:
+        # Alle Fehlermeldungen für die gefundene Matrikelnummer abrufen
+        fehlermeldungen = Fehlermeldung.objects.filter(matrikelnummer=matrikelnummer)
+    else:
+        fehlermeldungen = []
+
+    return render(
+        request, 
+        'messaging/student_dashboard.html',
+        {'email': email, 
+        'vorname': vorname, 
+        'nachname': nachname, 
+        'matrikelnummer':matrikelnummer,
+        'fehlermeldungen': fehlermeldungen}
+    )
 
 # The logic for the custom Login View
 class CustomLoginView(LoginView):
