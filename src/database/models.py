@@ -61,13 +61,19 @@ class Korrektur(models.Model):
     aktuellerStatus = models.CharField(
         max_length=2, choices=KorrekturstatusEnum.choices
     )
+    beschreibung = models.TextField(default="Hier ist ein Fehler!")
+
+    def __str__(self):
+        return f"""
+            Korrektur {self.id} by {self.ersteller},
+            status {self.aktuellerStatus.label}, Tutor: {self.bearbeiter}
+        """
 
 
 # GedrucktesSkript model
 class GedrucktesSkript(models.Model):
     korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
     seite = models.CharField(max_length=255)
-    beschreibung = models.TextField()
 
     def __str__(self):
         return str(self.id)
@@ -77,7 +83,6 @@ class GedrucktesSkript(models.Model):
 class PDFSkript(models.Model):
     korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
     seite = models.CharField(max_length=255)
-    beschreibung = models.TextField()
 
     def __str__(self):
         return str(self.id)
@@ -89,7 +94,6 @@ class IULearnWeb(models.Model):
     korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
     kapitel = models.CharField(max_length=255)
     unterkapitel = models.CharField(max_length=255, null=True)
-    beschreibung = models.TextField()
 
     def __str__(self):
         return str(self.id)
@@ -100,7 +104,6 @@ class IULearnIPhone(models.Model):
     korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
     kapitel = models.CharField(max_length=255)
     unterkapitel = models.CharField(max_length=255, null=True)
-    beschreibung = models.TextField()
 
     def __str__(self):
         return str(self.id)
@@ -111,7 +114,6 @@ class IULearnAndroid(models.Model):
     korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
     kapitel = models.CharField(max_length=255)
     unterkapitel = models.CharField(max_length=255, null=True)
-    beschreibung = models.TextField()
 
     def __str__(self):
         return str(self.id)
@@ -121,7 +123,6 @@ class IULearnAndroid(models.Model):
 class Podcast(models.Model):
     korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
     episode = models.CharField(max_length=255)
-    beschreibung = models.TextField()
 
     def __str__(self):
         return str(self.id)
@@ -132,7 +133,6 @@ class Video(models.Model):
     korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
     episode = models.CharField(max_length=255)
     zeit = models.CharField(max_length=255)
-    beschreibung = models.TextField()
 
     def __str__(self):
         return str(self.id)
@@ -141,7 +141,6 @@ class Video(models.Model):
 # AllgemeinSonstiges model
 class AllgemeinSonstiges(models.Model):
     korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    beschreibung = models.TextField()
 
     def __str__(self):
         return str(self.id)
