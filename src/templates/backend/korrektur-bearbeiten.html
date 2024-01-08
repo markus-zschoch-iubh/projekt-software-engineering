@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block page_title%}Korrektur bearbeiten{% endblock %}
+
+{% block content %}
+    <h2>Korrektur bearbeiten</h2>
+    <p>
+        Korrektur {{ korrektur.id }}<br/>
+        Ersteller: {{ korrektur.ersteller }}
+        für Kurs {{ korrektur.kurs }}
+        Kursmaterial {{ korrektur.kursmaterial }}
+        Status: {{ korrektur.aktuellerStatus.label }}
+    </p>
+    <p><a href="/backend/{{ tutor.id }}">Zurück zur Übersicht...</a></p>
+{% endblock content %}
