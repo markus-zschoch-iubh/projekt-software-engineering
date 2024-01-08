@@ -8,14 +8,19 @@
   <h2>Student Dashboard</h2>
   <p>Hallo {{vorname}} {{nachname}}!</p>
   <p>E-Mail-Adresse des Benutzers: {{ email }}</p>
-  <p>Matrikelnummer des Benutzers: {{ matrikelnummer }}</p>
+  <p>Matrikelnummer des Benutzers: {{ matrikelnummer }} </p>
   </br>
   <p>Neuen Fehler melden</p>
   <p>Meine gemeldeten Fehler:</p>
   {% if fehlermeldungen %}
           <ul>
           {% for fehler in fehlermeldungen %}
-              <li>{{ fehler.kursabkuerzung }}: {{ fehler.fehlerbeschreibung }}</li>
+              <li>
+                {{ fehler.typ }}:
+                {{ fehler.kurs }}:
+                {{ fehler.aktuellerStatus }}:
+                {{ fehler.fehler_beschreibung }} 
+                </li>
           {% endfor %}
           </ul>
       {% else %}
@@ -23,5 +28,7 @@
       {% endif %}
 
   <!-- Include the Logout Link -->
+  <a href="{% url 'fehler_melden' %}">Fehler melden</a>
+        </br>
   <a href="{% url 'logout' %}">Logout</a>
 {% endblock %}

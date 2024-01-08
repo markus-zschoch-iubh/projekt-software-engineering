@@ -57,10 +57,23 @@ class Korrektur(models.Model):
         Tutor, on_delete=models.CASCADE, blank=True, null=True
     )
     kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE)
-    kursmaterial = models.ForeignKey(Kursmaterial, on_delete=models.CASCADE)
+    #kursmaterial = models.ForeignKey(Kursmaterial, on_delete=models.CASCADE)
     aktuellerStatus = models.CharField(
         max_length=2, choices=KorrekturstatusEnum.choices
     )
+    fehler_beschreibung = models.TextField(default="Keine Beschreibung")
+
+# class Fehlermeldung(models.Model):
+#     matrikelnummer = models.CharField(max_length=100) #Ersteller
+#     vorname = models.CharField(max_length=100)
+#     nachname = models.CharField(max_length=100)
+#     email = models.EmailField()
+#     kursabkuerzung = models.CharField(max_length=100) #Kurs
+#     medium = models.CharField(max_length=100) #Kursmaterial
+#     fehlerbeschreibung = models.TextField() #Wird in Korrektur übernommen
+
+#     def __str__(self):
+#         return self.matrikelnummer
 
 
 # GedrucktesSkript model
@@ -145,18 +158,3 @@ class AllgemeinSonstiges(models.Model):
 
     def __str__(self):
         return str(self.id)
-    
-
-### Übernahme aus webhook/models.py
-
-class Fehlermeldung(models.Model):
-    matrikelnummer = models.CharField(max_length=100)
-    vorname = models.CharField(max_length=100)
-    nachname = models.CharField(max_length=100)
-    email = models.EmailField()
-    kursabkuerzung = models.CharField(max_length=100)
-    medium = models.CharField(max_length=100)
-    fehlerbeschreibung = models.TextField()
-
-    def __str__(self):
-        return self.matrikelnummer

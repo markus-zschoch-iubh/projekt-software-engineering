@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from .forms import MessageForm
-from database.models import Student, Fehlermeldung
+from database.models import Student, Korrektur
 
 
 # Create your views here.
@@ -42,7 +42,7 @@ def student_dashboard(request):
 
     if  matrikelnummer:
         # Alle Fehlermeldungen für die gefundene Matrikelnummer abrufen
-        fehlermeldungen = Fehlermeldung.objects.filter(matrikelnummer=matrikelnummer)
+        fehlermeldungen = Korrektur.objects.filter(ersteller=matrikelnummer)
     else:
         fehlermeldungen = []
 
@@ -53,7 +53,8 @@ def student_dashboard(request):
         'vorname': vorname, 
         'nachname': nachname, 
         'matrikelnummer':matrikelnummer,
-        'fehlermeldungen': fehlermeldungen}
+        'fehlermeldungen': fehlermeldungen
+        }
     )
 
 # The logic for the custom Login View

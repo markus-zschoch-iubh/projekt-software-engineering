@@ -1,32 +1,31 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 import requests
 
-from form.forms import FehlermeldungForm
-from database.models import Fehlermeldung
+from form.forms import KorrekturForm
+from database.models import Korrektur
 
 
 jheader = {"Content-Type": "application/json"}
 webhook_url = "http://localhost:8000/webhook/"
 
 # Funktion zum  direkten Speichern der Fehlermeldung in der DB
+@login_required
 def fehler_melden(request):
     if request.method == 'POST':
-        form = FehlermeldungForm(request.POST)
+        form = KorrekturForm(request.POST)
         if form.is_valid():
-            Fehlermeldung.objects.create(
-                matrikelnummer=form.cleaned_data['matrikelnummer'],
-                vorname=form.cleaned_data['vorname'],
-                nachname=form.cleaned_data['nachname'],
-                email=form.cleaned_data['email'],
-                kursabkuerzung=form.cleaned_data['kursabkuerzung'],
-                medium=form.cleaned_data['medium'],
-                fehlerbeschreibung=form.cleaned_data['fehlerbeschreibung']
+            Korrektur.objects.create(
+                ersteller=form.cleaned_data['ersteller'],
+                typ=form.cleaned_data['typ'],
+                kurs=form.cleaned_data['kurs'],
+                fehler_beschreibung=form.cleaned_data['fehler_beschreibung'],
             )
             return redirect('bestaetigung')
 
     else:
         print('!!!!!!!!!!!!!! Die Seite: "fehler_melden" wurde abgerufen !!!!!!!!!!!!!!')
-        form = FehlermeldungForm()
+        form = KorrekturForm()
 
     return render(request, "form/fehler_melden.html", {"form": form})
 
@@ -34,7 +33,7 @@ def fehler_melden(request):
 ### Funktion zum senden der Fehlermeldung an den Webhook
 def fehler_melden_an_webhook(request):
     if request.method == "POST":
-        form = FehlermeldungForm(request.POST)
+        form = KorrekturForm(request.POST)
         if form.is_valid():
             # Konvertieren der Formulardaten in ein Python-Dict
             form_data = form.cleaned_data
@@ -47,7 +46,7 @@ def fehler_melden_an_webhook(request):
                     webhook_url,
                     json=form_data,
                     headers=jheader,
-                )  # , timeout=(3,3))
+                    timeout=(3,3))
                 print("POST Executed")
                 response.raise_for_status()
 
@@ -58,7 +57,7 @@ def fehler_melden_an_webhook(request):
         print(
             '!!!!!!!!!!!!!! Die Seite: "fehler_melden" wurde abgerufen !!!!!!!!!!!!!!'
         )
-        form = FehlermeldungForm()
+        form = KorrekturForm()
 
     return render(request, "form/fehler_melden.html", {"form": form})
 

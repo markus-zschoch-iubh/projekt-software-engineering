@@ -1,29 +1,26 @@
 {% extends 'base.html' %}
 
-{% block page_title %}Fehlerliste{% endblock %}
+{% block page_title %}Korrekturliste{% endblock %}
 
 {% block content %}
-<h2>Fehlermeldungen</h2>
+<h2>Korrekturmeldungen</h2>
 <table>
     <tr>
+        <th>Typ</th>
         <th>Matrikelnummer</th>
-        <th>Vorname</th>
-        <th>Nachname</th>
-        <th>Email</th>
-        <th>Kursabkürzung</th>
-        <th>Medium</th>
+        <th>Bearbeiter</th>
+        <th>Kurs</th>
+        <th>Aktueller Status</th>
         <th>Fehlerbeschreibung</th>
     </tr>
     {% for fehler in fehler %}
     <tr>
-        <td>{{ fehler.matrikelnummer }}</td>
-        <td>{{ fehler.vorname }}</td>
-        <td>{{ fehler.nachname }}</td>
-        <td>{{ fehler.email }}</td>
-        <td>{{ fehler.kursabkuerzung }}</td>
-        <td>{{ fehler.medium }}</td>
+        <td>{{ fehler.typ }}</td>
+        <td>{{ fehler.ersteller }}</td>
+        <td>{{ fehler.bearbeiter }}</td>
+        <td>{{ fehler.kurs }}</td>
+        <td>{{ fehler.aktuellerStatus }}</td>
         <td>{{ fehler.fehlerbeschreibung }}</td>
-        <td><a href="{% url 'fehler_bearbeiten' fehler.id %}">Bearbeiten</a></td>
     </tr>
     {% endfor %}
 </table>

@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from database.models import Fehlermeldung
+from database.models import Korrektur
 
 
 @csrf_exempt
@@ -14,24 +14,21 @@ def webhook(request):
         print("WEBHOOK ERKENNT POST")
         try:
             data = json.loads(request.body)
-            # Hier können Sie die empfangenen Daten verarbeiten
+            
             # Testweise aus HTML Body extrahierte JSON Daten schreiben
-
             with open("webhook/inbox.json", "w", encoding="utf-8") as inbox:
                 json.dump(data, inbox, ensure_ascii=False, indent=4)
+
             print("Webhook return follows")
 
-            neue_meldung = Fehlermeldung.objects.create(
-                # id=data['id'],
-                matrikelnummer=data["matrikelnummer"],
-                vorname=data["vorname"],
-                nachname=data["nachname"],
-                email=data["email"],
-                kursabkuerzung=data["kursabkuerzung"],
-                medium=data["medium"],
-                fehlerbeschreibung=data["fehlerbeschreibung"],
+            Korrektur.objects.create(
+                ersteller=data["ersteller"],
+                typ=data["typ"],
+                kurs=data["kurs"],
+                fehler_beschreibung=data["fehler_beschreibung"]
             )
-            print("Neue Meldung eingegangen: " + str(data))
+
+            print("Neue Meldung beim Webhook eingegangen: " + str(data))
 
             return JsonResponse({"status": "Erfolgreich empfangen"}, status=200)
 
