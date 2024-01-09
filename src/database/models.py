@@ -1,9 +1,8 @@
 from django.db import models
-
+from django.utils import timezone
 from .enums import KursmaterialEnum, KursstatusEnum, KorrekturstatusEnum
 
 # Create your models here.
-
 
 class Kurs(models.Model):
     name = models.CharField(max_length=255)
@@ -59,9 +58,22 @@ class Korrektur(models.Model):
     kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE)
     #kursmaterial = models.ForeignKey(Kursmaterial, on_delete=models.CASCADE)
     aktuellerStatus = models.CharField(
-        max_length=2, choices=KorrekturstatusEnum.choices
+        max_length=2,
+        choices=KorrekturstatusEnum.choices,
+        default=KorrekturstatusEnum.OFFEN
     )
     fehler_beschreibung = models.TextField(default="Keine Beschreibung")
+
+class Messages(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student_messages')
+    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE, related_name='tutor_messages')
+    korrektur = models.ForeignKey(Korrektur, on_delete=models.CASCADE, related_name='korrektur_messages')
+    text = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Nachricht von {self.student} an {self.tutor} für {self.korrektur}"
 
 # class Fehlermeldung(models.Model):
 #     matrikelnummer = models.CharField(max_length=100) #Ersteller

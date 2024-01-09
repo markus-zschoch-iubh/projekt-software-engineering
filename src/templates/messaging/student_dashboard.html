@@ -1,34 +1,40 @@
 {% extends 'base.html' %}
 
-{% load static %}
-
 {% block page_title %}Student Dashboard{% endblock %}
 
 {% block content %}
-  <h2>Student Dashboard</h2>
-  <p>Hallo {{vorname}} {{nachname}}!</p>
-  <p>E-Mail-Adresse des Benutzers: {{ email }}</p>
-  <p>Matrikelnummer des Benutzers: {{ matrikelnummer }} </p>
-  </br>
-  <p>Neuen Fehler melden</p>
-  <p>Meine gemeldeten Fehler:</p>
-  {% if fehlermeldungen %}
-          <ul>
-          {% for fehler in fehlermeldungen %}
-              <li>
-                {{ fehler.typ }}:
-                {{ fehler.kurs }}:
-                {{ fehler.aktuellerStatus }}:
-                {{ fehler.fehler_beschreibung }} 
-                </li>
-          {% endfor %}
-          </ul>
-      {% else %}
-          <p>Keine Fehlermeldungen gefunden.</p>
-      {% endif %}
+    <h2>Student Dashboard</h2>
+    <p>Hallo {{vorname}} {{nachname}}!</p>
+    <p>E-Mail-Adresse des Benutzers: {{ email }}</p>
+    <p>Matrikelnummer des Benutzers: {{ matrikelnummer }} </p>
+    <p><a href="{% url 'fehler_melden' %}">Einen Fehler melden</a></p>
+    <P><a href="{% url 'logout' %}">Logout</a></P>
 
-  <!-- Include the Logout Link -->
-  <a href="{% url 'fehler_melden' %}">Fehler melden</a>
-        </br>
-  <a href="{% url 'logout' %}">Logout</a>
+    <h4>Meine gemeldeten Fehler:</h4>
+{% if fehlermeldungen %}
+    <table style="table-layout: fixed; width: 100%;">
+        <thead>
+            <tr>
+                <th>Fehler Typ</th>
+                <th>Kurs</th>
+                <th>Aktueller Status</th>
+                <th>Fehlerbeschreibung</th>
+                <th>Kontaktmöglichkeit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fehler in fehlermeldungen %}
+                <tr>
+                    <td>{{ fehler.typ }}</td>
+                    <td>{{ fehler.kurs }}</td>
+                    <td>{{ fehler.aktuellerStatus }}</td>
+                    <td>{{ fehler.fehler_beschreibung }}</td>
+                    <td><a href="{% url 'korrektur_messages' korrektur_id=fehler.id %}">Nachrichten anzeigen</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Keine Fehlermeldungen gefunden.</p>
+{% endif %}
 {% endblock %}

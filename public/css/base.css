@@ -12,3 +12,12 @@ html body {
     min-width: 450px;
     margin: 1em auto;
 }
+
+table th, table td {
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}

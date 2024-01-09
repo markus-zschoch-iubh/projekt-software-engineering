@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from .forms import MessageForm
-from database.models import Student, Korrektur
+from database.models import Student, Korrektur, Messages
 
 
 # Create your views here.
@@ -43,6 +43,12 @@ def student_dashboard(request):
     if  matrikelnummer:
         # Alle Fehlermeldungen für die gefundene Matrikelnummer abrufen
         fehlermeldungen = Korrektur.objects.filter(ersteller=matrikelnummer)
+
+        # Umwandlung der Enum-Zahlenwerte in lesbare Bezeichnungen
+        for fehlermeldung in fehlermeldungen:
+            fehlermeldung.typ = fehlermeldung.get_typ_display()
+            fehlermeldung.aktuellerStatus = fehlermeldung.get_aktuellerStatus_display()
+
     else:
         fehlermeldungen = []
 
@@ -73,17 +79,26 @@ class CustomLoginView(LoginView):
 class CustomLogoutView(LogoutView):
     template_name = 'registration/logout.html' 
 
-
-
-# Chat View
-def chat_view(request):
+# The Chat View for the Students
+def korrektur_messages(request, korrektur_id):
+    korrektur = Korrektur.objects.get(id=korrektur_id)
+    messages = Messages.objects.filter(korrektur=korrektur).order_by('-created_at')
     form = MessageForm()
+
     if request.method == 'POST':
         form = MessageForm(request.POST)
         if form.is_valid():
-            message_text = form.cleaned_data['message']
-            # Logik zum Senden der Nachricht
-    return render(request, 'messaging/chat.html', {'form': form})
+            message = form.save(commit=False)
+            message.korrektur = korrektur
+            message.student = request.user.student  # Angenommen, der aktuelle Benutzer ist ein Student
+            message.tutor = korrektur.bearbeiter
+            message.save()
+            return redirect('korrektur_messages', korrektur_id=korrektur_id)
+
+    context = {'korrektur': korrektur, 'messages': messages, 'form': form}
+    return render(request, 'messaging/korrektur_messages.html', context)
+
+
 
 
      
