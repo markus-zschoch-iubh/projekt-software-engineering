@@ -1,9 +1,5 @@
 from django.shortcuts import render
 
-# from django.http import HttpResponse
-
-# from django.http import HttpResponse
-
 from database.models import Korrektur, Tutor
 
 # Create your views here.
@@ -31,7 +27,13 @@ def tutor_index(request, tutor_id):
         print(f"Zugewiesene Korrektur nach Zuweisung: {zugewiesene_korrektur}")
 
     offene_korrekturen = Korrektur.objects.filter(aktuellerStatus="01")
+    for korrektur in offene_korrekturen:
+        korrektur.kursmaterial = korrektur.get_kursmaterial_display()
+        korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
     meine_korrekturen = Korrektur.objects.filter(bearbeiter=tutor)
+    for korrektur in meine_korrekturen:
+        korrektur.kursmaterial = korrektur.get_kursmaterial_display()
+        korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
 
     return render(
         request,
