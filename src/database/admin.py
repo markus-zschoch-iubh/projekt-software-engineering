@@ -14,7 +14,8 @@ from .models import (
     Kursmaterial,
     Student,
     StudentKurs,
-    Tutor
+    Tutor,
+    Messages
 )
 
 # Register your models here.
@@ -32,3 +33,4 @@ admin.site.register(Kursmaterial)
 admin.site.register(Student)
 admin.site.register(StudentKurs)
 admin.site.register(Tutor)
+admin.site.register(Messages)

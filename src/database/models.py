@@ -66,7 +66,7 @@ class Korrektur(models.Model):
 
 class Messages(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student_messages')
-    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE, related_name='tutor_messages')
+    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE, related_name='tutor_messages', null=True, blank=True)
     korrektur = models.ForeignKey(Korrektur, on_delete=models.CASCADE, related_name='korrektur_messages')
     text = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)

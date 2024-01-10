@@ -49,7 +49,7 @@ def fehler_melden(request):
     return render(request, "form/fehler_melden.html", {"form": form})
 
 
-### Funktion zum senden der Fehlermeldung an den Webhook
+### Funktion zum senden der Fehlermeldung an den Webhook - Funktioniert nicht mehr ###
 def fehler_melden_an_webhook(request):
     if request.method == "POST":
         form = KorrekturForm(request.POST)

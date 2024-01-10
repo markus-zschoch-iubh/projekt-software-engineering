@@ -79,8 +79,22 @@ class CustomLoginView(LoginView):
 class CustomLogoutView(LogoutView):
     template_name = 'registration/logout.html' 
 
+# Studentenobjekt des aktuellen Benutzers erhalten
+def get_student(request):
+    try:
+        user = request.user
+        email = user.email
+        # Den Studenten anhand der E-Mail finden
+        student = Student.objects.get(email=email)
+    except Exception as e:
+        print(e)
+        student = None
+
+    return student 
+
 # The Chat View for the Students
 def korrektur_messages(request, korrektur_id):
+    student = get_student(request)
     korrektur = Korrektur.objects.get(id=korrektur_id)
     messages = Messages.objects.filter(korrektur=korrektur).order_by('-created_at')
     form = MessageForm()
@@ -90,7 +104,7 @@ def korrektur_messages(request, korrektur_id):
         if form.is_valid():
             message = form.save(commit=False)
             message.korrektur = korrektur
-            message.student = request.user.student  # Angenommen, der aktuelle Benutzer ist ein Student
+            message.student = student
             message.tutor = korrektur.bearbeiter
             message.save()
             return redirect('korrektur_messages', korrektur_id=korrektur_id)
