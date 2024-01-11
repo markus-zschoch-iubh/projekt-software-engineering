@@ -69,18 +69,36 @@ def student_dashboard(request):
         },
     )
 
-
+#Userlogin von Django user
 # The logic for the custom Login View
 class CustomLoginView(LoginView):
-    # Add custom logic if needed
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        # Check user group and redirect accordingly
-        if self.request.user.groups.filter(name="Tutor").exists():
-            return redirect("/backend/tutor_index")
-        elif self.request.user.groups.filter(name="Student").exists():
-            return redirect("student_dashboard")
-        return response
+    
+     def get_success_url(self):
+        user = self.request.user
+
+# Check user group and redirect accordingly
+        if user.groups.filter(name='Tutor').exists():
+            return reverse ('tutor_dashboard')
+        elif user.groups.filter(name='Student').exists():
+            return reverse ('student_dashboard')
+
+        # Default redirection if no group is found
+        return super().get_success_url()
+ 
+
+
+
+# # The logic for the custom Login View
+# class CustomLoginView(LoginView):
+#     # Add custom logic if needed
+#     def form_valid(self, form):
+#         response = super().form_valid(form)
+#         # Check user group and redirect accordingly
+#         if self.request.user.groups.filter(name="Tutor").exists():
+#             return redirect("/backend/tutor_index")
+#         elif self.request.user.groups.filter(name="Student").exists():
+#             return redirect("student_dashboard")
+#         return response
 
 
 # The Class for the log out view
