@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block page_title%}Korrekturenübersicht{% endblock %}
+{% block content%}
+    <h2>Offene Korrekturen</h2>
+    <ul>
+        {% for korrektur in korrekturen %}
+            <li>
+                <form method="post">
+                    Meldung für Kurs {{ korrektur.kurs }},
+                    Kursmaterial {{ korrektur.kursmaterial }}.
+                    Ersteller: {{ korrektur.ersteller }}.
+                    Status: {{ korrektur.aktuellerStatus }}
+                    <input type="hidden" name="korrektur_id" value="{{ korrektur.id }}" />
+                    <button type="submit">Mir zuweisen</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>Meine Korrekturen</h2>
+    <ul>
+        {% for korrektur in meine_korrekturen %}
+            <li>
+                Meldung für Kurs {{ korrektur.kurs }},
+                Kursmaterial {{ korrektur.kursmaterial }}.
+                Ersteller: {{ korrektur.ersteller }}.
+                Status: {{ korrektur.aktuellerStatus }}
+                <a href="/backend/{{ korrektur.id }}">Bearbeiten... </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock%}

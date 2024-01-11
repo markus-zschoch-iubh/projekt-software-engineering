@@ -1,12 +1,16 @@
 from django.db import models
 from django.utils import timezone
-from .enums import KursmaterialEnum, KursstatusEnum, KorrekturstatusEnum
+from .enums import KursmaterialEnum, KorrekturstatusEnum
 
 # Create your models here.
+
 
 class Kurs(models.Model):
     name = models.CharField(max_length=255)
     kurzname = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name_plural = "Kurse"
 
     def __str__(self):
         return f"{self.kurzname} - {self.name}"
@@ -16,8 +20,11 @@ class Kursmaterial(models.Model):
     typ = models.CharField(max_length=2, choices=KursmaterialEnum.choices)
     kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = "Kursmaterialien"
+
     def __str__(self):
-        return f"{self.typ} - {self.kurs}"
+        return f"{self.get_typ_display()} - {self.kurs}"
 
 
 class Student(models.Model):
@@ -27,16 +34,11 @@ class Student(models.Model):
     email = models.EmailField()
     password = models.CharField(max_length=255)
 
+    class Meta:
+        verbose_name_plural = "Studenten"
+
     def __str__(self):
         return f"{self.nachname}, {self.vorname} ({self.martrikelnummer})"
-
-
-class StudentKurs(models.Model):
-    martrikelnummer: models.ForeignKey(
-        Student, on_delete=models.CASCADE, null=True
-    )
-    kursId = models.ForeignKey(Kurs, on_delete=models.CASCADE, null=True)
-    status: models.CharField(max_length=2, choices=KursstatusEnum.choices)
 
 
 class Tutor(models.Model):
@@ -45,35 +47,69 @@ class Tutor(models.Model):
     email = models.EmailField()
     password = models.CharField(max_length=255)
 
+    class Meta:
+        verbose_name_plural = "Tutoren"
+
     def __str__(self):
         return f"{self.nachname}, {self.vorname}"
 
 
 class Korrektur(models.Model):
-    typ = models.CharField(max_length=2, choices=KursmaterialEnum.choices)
-    ersteller = models.ForeignKey(Student, on_delete=models.CASCADE)
-    bearbeiter = models.ForeignKey(
-        Tutor, on_delete=models.CASCADE, blank=True, null=True
+    ersteller = models.ForeignKey(
+        Student, null=True, on_delete=models.SET_NULL
     )
-    kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE)
-    #kursmaterial = models.ForeignKey(Kursmaterial, on_delete=models.CASCADE)
+    bearbeiter = models.ForeignKey(
+        Tutor, on_delete=models.SET_NULL, blank=True, null=True
+    )
+    kurs = models.ForeignKey(Kurs, null=True, on_delete=models.SET_NULL)
+    kursmaterial = models.ForeignKey(
+        Kursmaterial, null=True, on_delete=models.SET_NULL
+    )
     aktuellerStatus = models.CharField(
         max_length=2,
         choices=KorrekturstatusEnum.choices,
-        default=KorrekturstatusEnum.OFFEN
+        default=KorrekturstatusEnum.OFFEN,
     )
-    fehler_beschreibung = models.TextField(default="Keine Beschreibung")
+    beschreibung = models.TextField(default="Keine Beschreibung")
+
+    class Meta:
+        verbose_name_plural = "Korrekturen"
+
 
 class Messages(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student_messages')
-    tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE, related_name='tutor_messages', null=True, blank=True)
-    korrektur = models.ForeignKey(Korrektur, on_delete=models.CASCADE, related_name='korrektur_messages')
+    class SenderENUM(models.TextChoices):
+        TUTOR = "01", "Tutor"
+        STUDENT = "02", "Student"
+
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="student_messages",
+    )
+    tutor = models.ForeignKey(
+        Tutor,
+        on_delete=models.SET_NULL,
+        related_name="tutor_messages",
+        null=True,
+        blank=True,
+    )
+    korrektur = models.ForeignKey(
+        Korrektur, on_delete=models.CASCADE, related_name="korrektur_messages"
+    )
     text = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
-    is_read = models.BooleanField(default=False)
+    sender = models.CharField(
+        max_length=2, choices=SenderENUM.choices, default=SenderENUM.STUDENT
+    )
+
+    class Meta:
+        verbose_name_plural = "Messages"
 
     def __str__(self):
-        return f"Nachricht von {self.student} an {self.tutor} für {self.korrektur}"
+        return f"""Nachricht von {self.student}
+            an {self.tutor} für {self.korrektur}"""
+
 
 # class Fehlermeldung(models.Model):
 #     matrikelnummer = models.CharField(max_length=100) #Ersteller
@@ -86,87 +122,3 @@ class Messages(models.Model):
 
 #     def __str__(self):
 #         return self.matrikelnummer
-
-
-# GedrucktesSkript model
-class GedrucktesSkript(models.Model):
-    korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    seite = models.CharField(max_length=255)
-    beschreibung = models.TextField()
-
-    def __str__(self):
-        return str(self.id)
-
-
-# PDFSkript model
-class PDFSkript(models.Model):
-    korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    seite = models.CharField(max_length=255)
-    beschreibung = models.TextField()
-
-    def __str__(self):
-        return str(self.id)
-
-
-# IULearnWeb model
-class IULearnWeb(models.Model):
-    id = models.IntegerField(primary_key=True)
-    korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    kapitel = models.CharField(max_length=255)
-    unterkapitel = models.CharField(max_length=255, null=True)
-    beschreibung = models.TextField()
-
-    def __str__(self):
-        return str(self.id)
-
-
-# IULearnIPhone model
-class IULearnIPhone(models.Model):
-    korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    kapitel = models.CharField(max_length=255)
-    unterkapitel = models.CharField(max_length=255, null=True)
-    beschreibung = models.TextField()
-
-    def __str__(self):
-        return str(self.id)
-
-
-# IULearnAndroid model
-class IULearnAndroid(models.Model):
-    korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    kapitel = models.CharField(max_length=255)
-    unterkapitel = models.CharField(max_length=255, null=True)
-    beschreibung = models.TextField()
-
-    def __str__(self):
-        return str(self.id)
-
-
-# Podcast model
-class Podcast(models.Model):
-    korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    episode = models.CharField(max_length=255)
-    beschreibung = models.TextField()
-
-    def __str__(self):
-        return str(self.id)
-
-
-# Video model
-class Video(models.Model):
-    korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    episode = models.CharField(max_length=255)
-    zeit = models.CharField(max_length=255)
-    beschreibung = models.TextField()
-
-    def __str__(self):
-        return str(self.id)
-
-
-# AllgemeinSonstiges model
-class AllgemeinSonstiges(models.Model):
-    korrektur = models.OneToOneField(Korrektur, on_delete=models.CASCADE)
-    beschreibung = models.TextField()
-
-    def __str__(self):
-        return str(self.id)

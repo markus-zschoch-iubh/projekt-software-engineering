@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-
+"""
 class Fehlermeldung(models.Model):
     matrikelnummer = models.CharField(max_length=100)
     vorname = models.CharField(max_length=100)
@@ -36,7 +36,6 @@ class Student(models.Model):
     password = models.CharField(max_length=255)
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.martrikelnummer
 
 
@@ -49,7 +48,6 @@ class Tutor(models.Model):
     password = models.CharField(max_length=255)
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -60,7 +58,6 @@ class Kurs(models.Model):
     kurzname = models.CharField(max_length=255)
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -73,7 +70,6 @@ class Korrektur(models.Model):
     kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE)
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -84,7 +80,6 @@ class Kursmaterial(models.Model):
     kurs = models.ForeignKey(Kurs, on_delete=models.CASCADE)
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -96,7 +91,6 @@ class GedrucktesSkript(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -108,7 +102,6 @@ class PDFSkript(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -121,7 +114,6 @@ class IULearnWeb(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -134,7 +126,6 @@ class IULearnIPhone(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -147,7 +138,6 @@ class IULearnAndroid(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -159,7 +149,6 @@ class Podcast(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -172,7 +161,6 @@ class Video(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
 
 
@@ -183,5 +171,5 @@ class AllgemeinSonstiges(models.Model):
     beschreibung = models.TextField()
 
     def __str__(self):
-        """String for representating the Model Object."""
         return self.id
+"""

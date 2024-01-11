@@ -14,7 +14,7 @@ def webhook(request):
         print("WEBHOOK ERKENNT POST")
         try:
             data = json.loads(request.body)
-            
+
             # Testweise aus HTML Body extrahierte JSON Daten schreiben
             with open("webhook/inbox.json", "w", encoding="utf-8") as inbox:
                 json.dump(data, inbox, ensure_ascii=False, indent=4)
@@ -25,12 +25,14 @@ def webhook(request):
                 ersteller=data["ersteller"],
                 typ=data["typ"],
                 kurs=data["kurs"],
-                fehler_beschreibung=data["fehler_beschreibung"]
+                beschreibung=data["fehler_beschreibung"],
             )
 
             print("Neue Meldung beim Webhook eingegangen: " + str(data))
 
-            return JsonResponse({"status": "Erfolgreich empfangen"}, status=200)
+            return JsonResponse(
+                {"status": "Erfolgreich empfangen"}, status=200
+            )
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Ungültiges JSON"}, status=400)

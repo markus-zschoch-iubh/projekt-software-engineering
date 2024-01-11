@@ -1,33 +1,69 @@
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import render
 
-# from django.http import HttpResponse
-
-# from django.http import HttpResponse
-
 from database.models import Korrektur, Tutor
+
+
+# Helper functions
+
+
+def get_tutor(request):
+    try:
+        tutor = Tutor.objects.get(email=request.user.email)
+
+    except Exception as e:
+        print(e)
+        tutor = None
+
+    return tutor
+
 
 # Create your views here.
 
 
-def tutor_overview(request):
-    tutoren = Tutor.objects.all()
-
-    return render(
-        request, "backend/overview.html", context={"tutoren": tutoren}
-    )
-
-
-def tutor_index(request, tutor_id):
-    tutor = Tutor.objects.get(pk=tutor_id)
-    offene_korrekturen = Korrektur.objects.filter(aktuellerStatus="01")
-    meine_korrekturen = Korrektur.objects.filter(bearbeiter=tutor)
+@login_required
+def korrektur_bearbeiten(request, korrektur_id):
+    tutor = get_tutor(request)
+    korrektur = Korrektur.objects.get(pk=korrektur_id)
 
     return render(
         request,
-        "backend/tutor_index.html",
+        "backend/korrektur-bearbeiten.html",
+        context={"korrektur": korrektur, "tutor": tutor},
+    )
+
+
+@login_required
+def tutor_index(request):
+    tutor = get_tutor(request)
+    if tutor is None:
+        return Http404("Ein Tutor mit dieser Emailadresse existiert nicht.")
+
+    if request.method == "POST" and request.POST.get("korrektur_id", ""):
+        zugewiesene_korrektur = Korrektur.objects.get(
+            id=request.POST.get("korrektur_id", "")
+        )
+        zugewiesene_korrektur.bearbeiter = tutor
+        zugewiesene_korrektur.aktuellerStatus = "02"
+        zugewiesene_korrektur.save()
+
+    offene_korrekturen = Korrektur.objects.filter(aktuellerStatus="01")
+    for korrektur in offene_korrekturen:
+        # korrektur.kursmaterial = korrektur.get_kursmaterial_display()
+        korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
+    meine_korrekturen = Korrektur.objects.filter(bearbeiter=tutor)
+    for korrektur in meine_korrekturen:
+        # korrektur.kursmaterial = korrektur.get_kursmaterial_display()
+        korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
+
+    return render(
+        request,
+        "backend/tutor-index.html",
         context={
             "korrekturen": offene_korrekturen,
             "meine_korrekturen": meine_korrekturen,
+            "tutor": tutor,
         },
     )
 
@@ -37,4 +73,3 @@ def fehler_list_view(request):
         Korrektur.objects.all()
     )  # Alle Einträge aus der Tabelle Fehlermeldung holen
     return render(request, "backend/fehlerliste.html", {"fehler": fehler})
-
