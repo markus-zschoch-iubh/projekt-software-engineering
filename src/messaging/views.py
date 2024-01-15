@@ -6,7 +6,18 @@ from .forms import MessageForm
 from database.models import Student, Korrektur, Messages
 
 
-# Create your views here.
+# Studentenobjekt des aktuellen Benutzers erhalten
+def get_student(request):
+    try:
+        # Den Studenten anhand der E-Mail finden
+        student = Student.objects.get(email=request.user.email)
+    except Exception as e:
+        print(e)
+        student = None
+
+    return student
+
+
 def index(request):
     return HttpResponse(
         "Hier entsteht das Messaging-Portal zum Austausch zwischen Studierenden und Tutoren."
@@ -32,28 +43,19 @@ def student_dashboard(request):
     email = user.email
     vorname = user.first_name
     nachname = user.last_name
-    print("Erfolgreicher Login von " + vorname + nachname)
+    student = get_student(request)
+    matrikelnummer = student.martrikelnummer
 
-    try:
-        # Den Studenten anhand der E-Mail finden
-        student = Student.objects.get(email=email)
-        # Matrikelnummer des Studenten erhalten
-        matrikelnummer = student.martrikelnummer
-    except Student.DoesNotExist:
-        # Behandlung, falls kein Student mit dieser E-Mail existiert
-        matrikelnummer = None
-
+    print("---- Erfolgreicher Login von " + vorname + nachname + " ----")
+   
     if matrikelnummer:
         # Alle Fehlermeldungen für die gefundene Matrikelnummer abrufen
         fehlermeldungen = Korrektur.objects.filter(ersteller=matrikelnummer)
-
         # Umwandlung der Enum-Zahlenwerte in lesbare Bezeichnungen
         for fehlermeldung in fehlermeldungen:
-            fehlermeldung.typ = fehlermeldung.get_typ_display()
             fehlermeldung.aktuellerStatus = (
                 fehlermeldung.get_aktuellerStatus_display()
             )
-
     else:
         fehlermeldungen = []
 
@@ -86,20 +88,6 @@ class CustomLoginView(LoginView):
 # The Class for the log out view
 class CustomLogoutView(LogoutView):
     template_name = "registration/logout.html"
-
-
-# Studentenobjekt des aktuellen Benutzers erhalten
-def get_student(request):
-    try:
-        user = request.user
-        email = user.email
-        # Den Studenten anhand der E-Mail finden
-        student = Student.objects.get(email=email)
-    except Exception as e:
-        print(e)
-        student = None
-
-    return student
 
 
 # The Chat View for the Students

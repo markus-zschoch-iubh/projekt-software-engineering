@@ -7,7 +7,7 @@
 !public/.keep
 public_collected/*
 !public_collected/.keep
-
+src/database/migrations
 .env*
 !.env.example
 docker-compose.override.yml
