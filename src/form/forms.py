@@ -25,3 +25,20 @@ class KorrekturForm(forms.ModelForm):
         widgets = {
             "beschreibung": forms.Textarea(attrs={"cols": 50, "rows": 10}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["kursmaterial"].queryset = Kursmaterial.objects.none()
+
+        if "kurs" in self.data:
+            try:
+                kurs_id = int(self.data.get("kurs"))
+                self.fields[
+                    "kursmaterial"
+                ].queryset = Kursmaterial.objects.filter(kurs_id=kurs_id)
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields[
+                "kursmaterial"
+            ].queryset = self.instance.kurs.kursmaterial_set

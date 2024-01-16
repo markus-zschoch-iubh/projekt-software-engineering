@@ -25,7 +25,7 @@ class Kursmaterial(models.Model):
         unique_together = ["typ", "kurs"]
 
     def __str__(self):
-        return f"{self.get_typ_display()}"
+        return f"{self.get_typ_display()} - {self.kurs}"
 
 
 class Student(models.Model):

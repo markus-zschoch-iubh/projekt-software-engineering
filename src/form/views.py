@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 import requests
 
 from form.forms import KorrekturForm
-from database.models import Korrektur, Student, Kurs
+from database.models import Korrektur, Student, Kurs, Kursmaterial
 from messaging.views import get_student
 
 
@@ -29,8 +29,7 @@ def fehler_melden(request):
             return redirect("bestaetigung")
     else:
         print('---- Die Seite: "fehler_melden" wurde abgerufen ----')
-        form = KorrekturForm()
-
+    form = KorrekturForm()
     return render(request, "form/fehler_melden.html", {"form": form})
 
 
@@ -69,3 +68,15 @@ def fehler_melden_an_webhook(request):
         form = KorrekturForm()
 
     return render(request, "form/fehler_melden.html", {"form": form})
+
+
+# AJAX
+def load_kursmaterialien(request):
+    kurs_id = request.GET.get("kurs_id")
+    kursmaterialien = Kursmaterial.objects.filter(kurs_id=kurs_id).all()
+    return render(
+        request,
+        "form/kursmaterial_dropdown_list_options.html",
+        {"kursmaterialien": kursmaterialien},
+    )
+    # return JsonResponse(list(cities.values('id', 'name')), safe=False)
