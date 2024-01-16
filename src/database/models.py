@@ -109,16 +109,3 @@ class Messages(models.Model):
     def __str__(self):
         return f"""Nachricht von {self.student}
             an {self.tutor} für {self.korrektur}"""
-
-
-# class Fehlermeldung(models.Model):
-#     matrikelnummer = models.CharField(max_length=100) #Ersteller
-#     vorname = models.CharField(max_length=100)
-#     nachname = models.CharField(max_length=100)
-#     email = models.EmailField()
-#     kursabkuerzung = models.CharField(max_length=100) #Kurs
-#     medium = models.CharField(max_length=100) #Kursmaterial
-#     fehlerbeschreibung = models.TextField() #Wird in Korrektur übernommen
-
-#     def __str__(self):
-#         return self.matrikelnummer

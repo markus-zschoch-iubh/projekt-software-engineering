@@ -95,7 +95,7 @@ def korrektur_messages(request, korrektur_id):
     student = get_student(request)
     korrektur = Korrektur.objects.get(id=korrektur_id)
     messages = Messages.objects.filter(korrektur=korrektur).order_by(
-        "-created_at"
+        "created_at"
     )
     form = MessageForm()
 
