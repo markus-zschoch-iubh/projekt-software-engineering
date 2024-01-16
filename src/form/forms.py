@@ -1,7 +1,6 @@
 from django import forms
 
-from database.enums import KursmaterialEnum
-from database.models import Kurs, Korrektur
+from database.models import Kursmaterial, Korrektur
 
 
 # class KorrekturForm(forms.Form):
@@ -17,12 +16,12 @@ from database.models import Kurs, Korrektur
 #         initial="Bitte geben Sie hier eine möglichst genaue Fehlerbeschreibung ein.",
 #     )
 
+
 class KorrekturForm(forms.ModelForm):
     class Meta:
         model = Korrektur
-        #fields = ['ersteller', 'bearbeiter', 'kurs', 'kursmaterial', 'aktuellerStatus', 'beschreibung']
-        fields = ['kurs', 'kursmaterial', 'beschreibung']
+        fields = ["kurs", "kursmaterial", "beschreibung"]
         # Optional: Widgets hinzufügen, um die Darstellung der Formularfelder zu ändern
         widgets = {
-            'beschreibung': forms.Textarea(attrs={'cols': 50, 'rows': 10}),
+            "beschreibung": forms.Textarea(attrs={"cols": 50, "rows": 10}),
         }

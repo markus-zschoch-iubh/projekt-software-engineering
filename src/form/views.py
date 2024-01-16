@@ -12,21 +12,26 @@ webhook_url = "http://localhost:8000/webhook/"
 
 # Create your views here.
 
+
 @login_required
 def fehler_melden(request):
     form = KorrekturForm(request.POST)
-    if request.method == 'POST':
+    if request.method == "POST":
         print('---- Die Seite: "fehler_melden" hat einen POST gesendet ----')
         if form.is_valid():
-            korrektur = form.save(commit=False)  # Erstellt ein Korrektur-Objekt, speichert es aber noch nicht in der Datenbank
-            korrektur.ersteller = get_student(request)  # Setzt den aktuellen Benutzer als Ersteller
+            korrektur = form.save(
+                commit=False
+            )  # Erstellt ein Korrektur-Objekt, speichert es aber noch nicht in der Datenbank
+            korrektur.ersteller = get_student(
+                request
+            )  # Setzt den aktuellen Benutzer als Ersteller
             korrektur.save()  # Speichert das Objekt in der Datenbank
-            return redirect('bestaetigung')
+            return redirect("bestaetigung")
     else:
         print('---- Die Seite: "fehler_melden" wurde abgerufen ----')
         form = KorrekturForm()
 
-    return render(request, 'form/fehler_melden.html', {'form': form})
+    return render(request, "form/fehler_melden.html", {"form": form})
 
 
 def bestaetigungsseite_view(request):

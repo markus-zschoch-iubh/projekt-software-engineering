@@ -11,6 +11,7 @@ src/database/migrations
 .env*
 !.env.example
 docker-compose.override.yml
+migrations/
 
 
 ### Python ####################################################################

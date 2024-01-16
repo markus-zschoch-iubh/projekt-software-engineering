@@ -26,9 +26,20 @@ class KorrekturAdmin(admin.ModelAdmin):
     )
 
 
+class KursmaterialAdmin(admin.ModelAdmin):
+    list_display = (
+        "typ",
+        "kurs",
+    )
+    list_filter = (
+        "typ",
+        "kurs",
+    )
+
+
 admin.site.register(Korrektur, KorrekturAdmin)
 admin.site.register(Kurs)
-admin.site.register(Kursmaterial)
+admin.site.register(Kursmaterial, KursmaterialAdmin)
 admin.site.register(Student)
 admin.site.register(Tutor)
 admin.site.register(Messages)

@@ -22,9 +22,10 @@ class Kursmaterial(models.Model):
 
     class Meta:
         verbose_name_plural = "Kursmaterialien"
+        unique_together = ["typ", "kurs"]
 
     def __str__(self):
-        return f"{self.get_typ_display()} - {self.kurs}"
+        return f"{self.get_typ_display()}"
 
 
 class Student(models.Model):
