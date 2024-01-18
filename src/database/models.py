@@ -75,9 +75,25 @@ class Korrektur(models.Model):
 
     class Meta:
         verbose_name_plural = "Korrekturen"
+    
+
+    def save(self, *args, **kwargs):
+        super(Korrektur, self).save(*args, **kwargs)
+        message = Messages(
+            student=self.ersteller,
+            korrektur=self,
+            text=self.beschreibung,
+        )
+        message.save()
 
 
 class Messages(models.Model):
+    class AenderungTypENUM(models.TextChoices):
+        EROEFFNUNG = "01", "Eröffnung"
+        ZUWEISUNG = "02", "Zuweisung"
+        STATUS = "03", "Statusänderung"
+        NACHRICHT = "04", "Nachricht"
+    
     class SenderENUM(models.TextChoices):
         TUTOR = "01", "Tutor"
         STUDENT = "02", "Student"
@@ -102,6 +118,16 @@ class Messages(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     sender = models.CharField(
         max_length=2, choices=SenderENUM.choices, default=SenderENUM.STUDENT
+    )
+    status = models.CharField(
+        max_length=2,
+        choices=KorrekturstatusEnum.choices,
+        default=KorrekturstatusEnum.OFFEN
+    )
+    aenderung_typ = models.CharField(
+        max_length=2,
+        choices=AenderungTypENUM.choices,
+        default=AenderungTypENUM.EROEFFNUNG,
     )
 
     class Meta:
