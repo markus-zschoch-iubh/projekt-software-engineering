@@ -24,6 +24,7 @@ class KorrekturForm(forms.ModelForm):
         # Optional: Widgets hinzufügen, um die Darstellung der Formularfelder zu ändern
         widgets = {
             "beschreibung": forms.Textarea(attrs={"cols": 50, "rows": 10}),
+            "kurs": forms.Select(attrs={"hx-get": "load_kursmaterialien/", "hx-target": "#id_kursmaterial"})
         }
 
     def __init__(self, *args, **kwargs):
@@ -31,14 +32,6 @@ class KorrekturForm(forms.ModelForm):
         self.fields["kursmaterial"].queryset = Kursmaterial.objects.none()
 
         if "kurs" in self.data:
-            try:
-                kurs_id = int(self.data.get("kurs"))
-                self.fields[
-                    "kursmaterial"
-                ].queryset = Kursmaterial.objects.filter(kurs_id=kurs_id)
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk:
-            self.fields[
-                "kursmaterial"
-            ].queryset = self.instance.kurs.kursmaterial_set
+            kurs_id = int(self.data.get("kurs"))
+            self.fields["kursmaterial"].queryset = Kursmaterial.objects.filter(kurs_id=kurs_id)
+

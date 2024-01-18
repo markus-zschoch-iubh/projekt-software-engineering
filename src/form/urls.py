@@ -5,9 +5,5 @@ from . import views
 urlpatterns = [
     path("fehler_melden", views.fehler_melden, name="fehler_melden"),
     path("bestaetigung/", views.bestaetigungsseite_view, name="bestaetigung"),
-    path(
-        "ajax/load-kursmaterialien",
-        views.load_kursmaterialien,
-        name="ajax_load_kursmaterialien",
-    ),
+    path("load_kursmaterialien/", views.load_kursmaterialien, name="load_kursmaterialien")
 ]

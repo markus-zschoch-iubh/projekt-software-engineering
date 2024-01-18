@@ -69,14 +69,7 @@ def fehler_melden_an_webhook(request):
 
     return render(request, "form/fehler_melden.html", {"form": form})
 
-
-# AJAX
 def load_kursmaterialien(request):
-    kurs_id = request.GET.get("kurs_id")
-    kursmaterialien = Kursmaterial.objects.filter(kurs_id=kurs_id).all()
-    return render(
-        request,
-        "form/kursmaterial_dropdown_list_options.html",
-        {"kursmaterialien": kursmaterialien},
-    )
-    # return JsonResponse(list(cities.values('id', 'name')), safe=False)
+    kurs_id = request.GET.get("kurs")
+    kursmaterialien = Kursmaterial.objects.filter(kurs_id=kurs_id)
+    return render(request, "form/kursmaterial_options.html", {"kursmaterialien": kursmaterialien})
