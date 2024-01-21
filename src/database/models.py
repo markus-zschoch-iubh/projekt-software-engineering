@@ -71,20 +71,12 @@ class Korrektur(models.Model):
         choices=KorrekturstatusEnum.choices,
         default=KorrekturstatusEnum.OFFEN,
     )
-    beschreibung = models.TextField(default="Keine Beschreibung")
+    beschreibung = models.TextField(
+        default="Bitte tragen Sie hier die Beschreibung des Fehlers ein."
+    )
 
     class Meta:
         verbose_name_plural = "Korrekturen"
-    
-
-    def save(self, *args, **kwargs):
-        super(Korrektur, self).save(*args, **kwargs)
-        message = Messages(
-            student=self.ersteller,
-            korrektur=self,
-            text=self.beschreibung,
-        )
-        message.save()
 
 
 class Messages(models.Model):
@@ -93,7 +85,7 @@ class Messages(models.Model):
         ZUWEISUNG = "02", "Zuweisung"
         STATUS = "03", "Statusänderung"
         NACHRICHT = "04", "Nachricht"
-    
+
     class SenderENUM(models.TextChoices):
         TUTOR = "01", "Tutor"
         STUDENT = "02", "Student"
@@ -122,7 +114,7 @@ class Messages(models.Model):
     status = models.CharField(
         max_length=2,
         choices=KorrekturstatusEnum.choices,
-        default=KorrekturstatusEnum.OFFEN
+        default=KorrekturstatusEnum.OFFEN,
     )
     aenderung_typ = models.CharField(
         max_length=2,

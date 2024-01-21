@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views import View
 import requests
 
 from form.forms import KorrekturForm
-from database.models import Korrektur, Student, Kurs, Kursmaterial
+from database.models import Korrektur, Kursmaterial, Messages
 from messaging.views import get_student
 
 
@@ -13,7 +15,37 @@ webhook_url = "http://localhost:8000/webhook/"
 # Create your views here.
 
 
-@login_required
+class FehlerMeldenView(View):
+    form_class = KorrekturForm
+    initial = {"key": "value"}
+    template_name = "form/fehler_melden.html"
+
+    @method_decorator(login_required)
+    def get(self, request):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {"form": form})
+
+    @method_decorator(login_required)
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            ersteller_student = get_student(request)
+            korrektur = form.save(commit=False)
+            korrektur.ersteller = ersteller_student
+            korrektur.save()
+            message = Messages(
+                student=ersteller_student,
+                korrektur=korrektur,
+                text=korrektur.beschreibung,
+            )
+            message.save()
+            return redirect("bestaetigung")
+
+        return render(request, self.template_name, {"form": form})
+
+
+"""@login_required
 def fehler_melden(request):
     form = KorrekturForm(request.POST)
     if request.method == "POST":
@@ -30,7 +62,7 @@ def fehler_melden(request):
     else:
         print('---- Die Seite: "fehler_melden" wurde abgerufen ----')
     form = KorrekturForm()
-    return render(request, "form/fehler_melden.html", {"form": form})
+    return render(request, "form/fehler_melden.html", {"form": form})"""
 
 
 def bestaetigungsseite_view(request):
@@ -69,7 +101,12 @@ def fehler_melden_an_webhook(request):
 
     return render(request, "form/fehler_melden.html", {"form": form})
 
+
 def load_kursmaterialien(request):
     kurs_id = request.GET.get("kurs")
     kursmaterialien = Kursmaterial.objects.filter(kurs_id=kurs_id)
-    return render(request, "form/kursmaterial_options.html", {"kursmaterialien": kursmaterialien})
+    return render(
+        request,
+        "form/kursmaterial_options.html",
+        {"kursmaterialien": kursmaterialien},
+    )
