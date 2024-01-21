@@ -13,3 +13,8 @@ def home(request):
     }
 
     return render(request, "pages/home.html", context)
+
+
+def welcome_page(request):
+    return render(request, 'pages/welcome_page.html')
+

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-import requests
+#import requests
 
 from form.forms import FehlermeldungForm
 from database.models import Fehlermeldung
@@ -43,7 +43,7 @@ def fehler_melden_an_webhook(request):
             try:
                 ### VERSUCH MIT REQUESTS ###
                 print("JETZT FOLGT DER POST DER ZUM WORKER ABSTURZ FUEHRT")
-                response = requests.post(
+                response = request.post(
                     webhook_url,
                     json=form_data,
                     headers=jheader,

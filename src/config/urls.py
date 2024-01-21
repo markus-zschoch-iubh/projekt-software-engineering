@@ -28,6 +28,7 @@ urlpatterns = [
     path("webhook/", include("webhook.urls")),
     path("up/", include("up.urls")),
     path("", include("pages.urls")),
+    #path("", CustomLoginView.as_view(template_name='registration/login.html'), name='login')
     path("admin/", admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
     path('accounts/login/', CustomLoginView.as_view(template_name='registration/login.html'), name='login'),
