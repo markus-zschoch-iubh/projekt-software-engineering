@@ -22,6 +22,10 @@ class FehlerMeldenView(View):
 
     @method_decorator(login_required)
     def get(self, request):
+        student = get_student(request)
+        print(student)
+        if not student:
+            return redirect("/accounts/login")
         form = self.form_class(initial=self.initial)
         return render(request, self.template_name, {"form": form})
 

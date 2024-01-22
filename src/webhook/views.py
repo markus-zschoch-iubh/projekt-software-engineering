@@ -25,7 +25,7 @@ def webhook(request):
                 ersteller=data["ersteller"],
                 typ=data["typ"],
                 kurs=data["kurs"],
-                beschreibung=data["fehler_beschreibung"],
+                beschreibung=data["beschreibung"],
             )
 
             print("Neue Meldung beim Webhook eingegangen: " + str(data))

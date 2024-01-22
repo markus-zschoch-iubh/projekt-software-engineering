@@ -12,10 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="korrektur",
-            name="fehler_beschreibung",
-        ),
         migrations.AddField(
             model_name="korrektur",
             name="beschreibung",

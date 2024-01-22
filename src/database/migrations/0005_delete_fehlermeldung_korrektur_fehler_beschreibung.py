@@ -12,9 +12,4 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name="Fehlermeldung",
         ),
-        migrations.AddField(
-            model_name="korrektur",
-            name="fehler_beschreibung",
-            field=models.TextField(default="Keine Beschreibung"),
-        ),
     ]

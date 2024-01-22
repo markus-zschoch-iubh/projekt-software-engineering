@@ -28,7 +28,7 @@
                     <td>{{ fehler.kursmaterial }}</td>
                     <td>{{ fehler.kurs }}</td>
                     <td>{{ fehler.aktuellerStatus }}</td>
-                    <td>{{ fehler.fehler_beschreibung }}</td>
+                    <td>{{ fehler.beschreibung }}</td>
                     <td><a href="{% url 'korrektur_messages' korrektur_id=fehler.id %}">Nachrichten anzeigen</a></td>
                 </tr>
             {% endfor %}
