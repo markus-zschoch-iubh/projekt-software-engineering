@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block page_title %}Korrektur bearbeiten{% endblock page_title %}
+
+{% block content %}
+    <h1> Korrektur</h1>
+    <h2>Übersicht</h2>
+    <p>
+        <ul>
+            <li>Ersteller: {{ korrektur.ersteller }}</li>
+            <li>Aktueller Bearbeiter: {{ korrektur.bearbeiter }}</li>
+            <li>Kurs: {{ korrektur.kurs }}</li>
+            <li>Kursmaterial: {{ korrektur.kursmaterial }}</li>
+            <li>Aktueller Status: {{ korrektur.aktuellerStatus }}</li>
+        </ul>
+    </p>
+    <h2>Korrektur Verlauf & Kommunikation</h2>
+    <ul>
+    {% for message in messages %}
+        <li>Nachricht vom {{ message.created_at }}</li>
+        <li>Nachricht von: {% if message.sender == "01" %} {{message.tutor }} {% elif message.sender == "02" %}{{ message.student }} {% endif %}
+        <li>Text: {{ message.text }}</li>
+    {% endfor %}
+    </ul>
+{% endblock content %}

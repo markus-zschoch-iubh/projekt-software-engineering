@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import HttpResponseForbidden
 from django.shortcuts import render
 
-from database.models import Korrektur, Tutor
+from database.models import Korrektur, Messages, Tutor
 
 
 # Helper functions
@@ -26,11 +26,14 @@ def get_tutor(request):
 def korrektur_bearbeiten(request, korrektur_id):
     tutor = get_tutor(request)
     korrektur = Korrektur.objects.get(pk=korrektur_id)
+    korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
+
+    messages = Messages.objects.all()
 
     return render(
         request,
         "backend/korrektur-bearbeiten.html",
-        context={"korrektur": korrektur, "tutor": tutor},
+        context={"korrektur": korrektur, "tutor": tutor, "messages": messages},
     )
 
 
@@ -38,7 +41,9 @@ def korrektur_bearbeiten(request, korrektur_id):
 def tutor_index(request):
     tutor = get_tutor(request)
     if tutor is None:
-        return Http404("Ein Tutor mit dieser Emailadresse existiert nicht.")
+        return HttpResponseForbidden(
+            "Ein Tutor mit dieser Emailadresse existiert nicht."
+        )
 
     if request.method == "POST" and request.POST.get("korrektur_id", ""):
         zugewiesene_korrektur = Korrektur.objects.get(
