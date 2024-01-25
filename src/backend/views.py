@@ -1,7 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.views import View
 
+from .forms import MessagesForm
 from database.models import Korrektur, Messages, Tutor
 
 
@@ -22,13 +25,50 @@ def get_tutor(request):
 # Create your views here.
 
 
+class KorrekturBearbeitenView(View):
+    form_class = MessagesForm
+    initial = {"key": "value"}
+    template_name = "backend/korrektur-bearbeiten.html"
+
+    @method_decorator(login_required)
+    def get(self, request, korrektur_id):
+        tutor = get_tutor(request)
+        if tutor is None:
+            return HttpResponseForbidden(
+                "Ein Tutor mit dieser Emailadresse existiert nicht."
+            )
+        
+        korrektur = Korrektur.objects.get(pk=korrektur_id)
+        korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
+
+        messages = Messages.objects.filter(korrektur=korrektur).order_by("created_at").values()
+
+        first_message = messages[0]
+        last_message = messages[len(messages)-1]
+
+        form = self.form_class(initial=self.initial)
+        
+        return render(request, self.template_name, context={
+            "form": form,
+            "korrektur": korrektur,
+            "tutor": tutor,
+            "messages": messages,
+            "first_message": first_message,
+            "last_message": last_message,
+        })
+
 @login_required
 def korrektur_bearbeiten(request, korrektur_id):
     tutor = get_tutor(request)
+    if tutor is None:
+        return HttpResponseForbidden(
+            "Ein Tutor mit dieser Emailadresse existiert nicht."
+        )
+        
     korrektur = Korrektur.objects.get(pk=korrektur_id)
     korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
 
-    messages = Messages.objects.all()
+    messages = Messages.objects.filter(korrektur=korrektur)
 
     return render(
         request,
