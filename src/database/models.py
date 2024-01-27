@@ -106,7 +106,7 @@ class Messages(models.Model):
     korrektur = models.ForeignKey(
         Korrektur, on_delete=models.CASCADE, related_name="korrektur_messages"
     )
-    text = models.TextField()
+    text = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     sender = models.CharField(
         max_length=2, choices=SenderENUM.choices, default=SenderENUM.STUDENT

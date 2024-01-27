@@ -16,5 +16,9 @@
     </p>
     <h2>Korrektur Verlauf & Kommunikation</h2>
     {% include "include/messaging.html" %}
-    {{ form }}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Send</button>
+    </form>
 {% endblock content %}

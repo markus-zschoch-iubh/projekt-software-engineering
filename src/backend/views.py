@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 
@@ -37,25 +37,76 @@ class KorrekturBearbeitenView(View):
             return HttpResponseForbidden(
                 "Ein Tutor mit dieser Emailadresse existiert nicht."
             )
-        
+
         korrektur = Korrektur.objects.get(pk=korrektur_id)
         korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
 
-        messages = Messages.objects.filter(korrektur=korrektur).order_by("created_at").values()
-
-        first_message = messages[0]
-        last_message = messages[len(messages)-1]
+        messages = Messages.objects.filter(korrektur=korrektur).order_by(
+            "created_at"
+        )
+        for message in messages:
+            message.status = message.get_status_display()
+            # message.sender = message.get_sender_display()
 
         form = self.form_class(initial=self.initial)
-        
-        return render(request, self.template_name, context={
-            "form": form,
-            "korrektur": korrektur,
-            "tutor": tutor,
-            "messages": messages,
-            "first_message": first_message,
-            "last_message": last_message,
-        })
+
+        return render(
+            request,
+            self.template_name,
+            context={
+                "form": form,
+                "korrektur": korrektur,
+                "tutor": tutor,
+                "messages": messages,
+            },
+        )
+
+    @method_decorator(login_required)
+    def post(self, request, korrektur_id):
+        tutor = get_tutor(request)
+        if tutor is None:
+            return HttpResponseForbidden(
+                "Ein Tutor mit dieser Emailadresse existiert nicht."
+            )
+
+        korrektur = Korrektur.objects.get(pk=korrektur_id)
+        korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
+
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            new_message = form.save(commit=False)
+            new_message.student = korrektur.ersteller
+            new_message.korrektur = korrektur
+            if new_message.tutor is None or new_message == "":
+                new_message.tutor = korrektur.bearbeiter
+            new_message.sender = "01"
+            new_message.aenderungTyp = "04"
+            if new_message.tutor is not korrektur.bearbeiter:
+                new_message.aenderungTyp = "02"
+                korrektur.bearbeiter = new_message.tutor
+            if new_message.status is not korrektur.aktuellerStatus:
+                new_message.aenderungTyp = "03"
+                korrektur.aktuellerStatus = new_message.status
+            new_message.save()
+            korrektur.save()
+            return redirect("/backend/tutor-index")
+
+        messages = Messages.objects.filter(korrektur=korrektur).order_by(
+            "created_at"
+        )
+
+        return render(
+            request,
+            self.template_name,
+            context={
+                "form": form,
+                "korrektur": korrektur,
+                "tutor": tutor,
+                "messages": messages,
+            },
+        )
+
 
 @login_required
 def korrektur_bearbeiten(request, korrektur_id):
@@ -64,7 +115,7 @@ def korrektur_bearbeiten(request, korrektur_id):
         return HttpResponseForbidden(
             "Ein Tutor mit dieser Emailadresse existiert nicht."
         )
-        
+
     korrektur = Korrektur.objects.get(pk=korrektur_id)
     korrektur.aktuellerStatus = korrektur.get_aktuellerStatus_display()
 
