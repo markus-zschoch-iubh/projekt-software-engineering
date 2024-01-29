@@ -1,11 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
 import requests
 
 from form.forms import KorrekturForm
-from database.models import Korrektur, Kursmaterial, Messages
+from database.models import Kursmaterial, Messages
+from messaging.helper import ersteller_message_bei_neuer_korrektur
 from messaging.views import get_student
 
 
@@ -38,12 +39,7 @@ class FehlerMeldenView(View):
             korrektur = form.save(commit=False)
             korrektur.ersteller = ersteller_student
             korrektur.save()
-            message = Messages(
-                student=ersteller_student,
-                korrektur=korrektur,
-                text=korrektur.beschreibung,
-            )
-            message.save()
+            ersteller_message_bei_neuer_korrektur(korrektur, ersteller_student)
             return redirect("bestaetigung")
 
         return render(request, self.template_name, {"form": form})
