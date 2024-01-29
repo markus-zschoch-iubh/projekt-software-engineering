@@ -4,6 +4,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from .forms import MessageForm
 from database.models import Student, Korrektur, Messages
+from django.urls import reverse
 
 
 # Studentenobjekt des aktuellen Benutzers erhalten
@@ -29,11 +30,6 @@ def index(request):
 def tutor_dashboard(request):
     return render(request, "messaging/tutor_dashboard.html")
 
-
-# The Login View for the Students
-# @login_required
-# def student_dashboard(request):
-#    return render(request, 'messaging/student_dashboard.html')
 
 
 # Angepasstes Dashboard Student
@@ -71,18 +67,36 @@ def student_dashboard(request):
         },
     )
 
-
+#Userlogin von Django user
 # The logic for the custom Login View
 class CustomLoginView(LoginView):
-    # Add custom logic if needed
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        # Check user group and redirect accordingly
-        if self.request.user.groups.filter(name="Tutor").exists():
-            return redirect("/backend/tutor_index")
-        elif self.request.user.groups.filter(name="Student").exists():
-            return redirect("student_dashboard")
-        return response
+    
+     def get_success_url(self):
+        user = self.request.user
+
+# Check user group and redirect accordingly
+        if user.groups.filter(name='Tutor').exists():
+            return reverse('tutor_index')
+        elif user.groups.filter(name='Student').exists():
+            return reverse('student_dashboard')
+
+        # Default redirection if no group is found
+        return super().get_success_url()
+ 
+
+
+
+# # The logic for the custom Login View
+# class CustomLoginView(LoginView):
+#     # Add custom logic if needed
+#     def form_valid(self, form):
+#         response = super().form_valid(form)
+#         # Check user group and redirect accordingly
+#         if self.request.user.groups.filter(name="Tutor").exists():
+#             return redirect("/backend/tutor_index")
+#         elif self.request.user.groups.filter(name="Student").exists():
+#             return redirect("student_dashboard")
+#         return response
 
 
 # The Class for the log out view
