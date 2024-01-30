@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Messaging{% endblock %}
+
+{% block content %}
+
+<h3>Nachrichtenverlauf</h3>
+{% for message in messages %}
+    <p>{{ message.student.vorname }}: {{ message.text }}</p>
+{% endfor %}
+
+
+<h3>Neue Nachricht</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Senden</button>
+</form>
+{% endblock %}

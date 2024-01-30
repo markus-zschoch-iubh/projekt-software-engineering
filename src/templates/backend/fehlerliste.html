@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Korrekturliste{% endblock %}
+
+{% block content %}
+<h2>Korrekturmeldungen</h2>
+<table>
+    <tr>
+        <th>Typ</th>
+        <th>Matrikelnummer</th>
+        <th>Bearbeiter</th>
+        <th>Kurs</th>
+        <th>Aktueller Status</th>
+        <th>Fehlerbeschreibung</th>
+    </tr>
+    {% for fehler in fehler %}
+    <tr>
+        <td>{{ fehler.typ }}</td>
+        <td>{{ fehler.ersteller }}</td>
+        <td>{{ fehler.bearbeiter }}</td>
+        <td>{{ fehler.kurs }}</td>
+        <td>{{ fehler.aktuellerStatus }}</td>
+        <td>{{ fehler.fehlerbeschreibung }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

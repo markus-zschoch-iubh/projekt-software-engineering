@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Willkommen zum Korrekturmanagment</title>
+    <style>
+        body {
+            background-color: #f0f8ff; /* AliceBlue */
+            color: #333; /* DarkSlateGray */
+            font-family: Arial, sans-serif;
+        }
+
+        .welcome-container {
+            text-align: center;
+            padding: 50px;
+            margin: 50px auto;
+            max-width: 600px;
+            border-radius: 10px;
+            background-color: #fff; /* White */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4169e1; /* RoyalBlue */
+        }
+
+        a {
+            color: #1e90ff; /* DodgerBlue */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #team-image {
+            margin-top: 20px;
+        }
+
+        #team-image img {
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>Wilkommen im Korrekturmanagment Module der IU</h1>
+        <p>
+            Wir freuen uns auf ihren Besuch, hier geht's zum 
+            <a href="{% url 'login' %}">Login</a>.
+        </p>
+    </div>
+    
+    <p></p>
+    <p></p>
+    <h5><center>POWERD BY:</center></h5>
+    <!-- Team image at the bottom -->
+    <div id="team-image">
+        <img src="{% static 'images/Team.png' %}" width="700" height="250" alt="Das Team" />
+    </div>
+</body>
+</html>

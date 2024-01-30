@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block page_title%}Tutoren{% endblock %}
+{% block content%}
+    <ul>
+        {% for tutor in tutoren %}
+            <li><a href="{% url "tutor_index" tutor_id=tutor.pk %}">{{ tutor.vorname }} {{ tutor.nachname }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock%}

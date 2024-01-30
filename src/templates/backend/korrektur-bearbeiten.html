@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block page_title %}Korrektur bearbeiten{% endblock page_title %}
+
+{% block content %}
+    <h1> Korrektur</h1>
+    <h2>Übersicht</h2>
+    <p>
+        <ul>
+            <li>Ersteller: {{ korrektur.ersteller }}</li>
+            <li>Aktueller Bearbeiter: {{ korrektur.bearbeiter }}</li>
+            <li>Kurs: {{ korrektur.kurs }}</li>
+            <li>Kursmaterial: {{ korrektur.kursmaterial }}</li>
+            <li>Aktueller Status: {{ korrektur.aktuellerStatus }}</li>
+        </ul>
+    </p>
+    <h2>Korrektur Verlauf & Kommunikation</h2>
+    {% include "include/messaging.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Send</button>
+    </form>
+{% endblock content %}

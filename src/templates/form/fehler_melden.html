@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}Fehlermeldung in Lernunterlagen{% endblock %}
+
+{% block head %}<script src="https://unpkg.com/htmx.org@1.9.2"></script>{% endblock head %}
+
+{% block content %}
+    <h1>Fehlermeldung in Lernunterlagen</h1>
+    <h2>Melden Sie einen Fehler</h2>
+    <form method="post" id="korrekurForm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Senden</button>
+    </form>
+{% endblock %}

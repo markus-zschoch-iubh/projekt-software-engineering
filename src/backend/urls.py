@@ -3,5 +3,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.index)
+    path("tutor-index", views.tutor_index, name="tutor_index"),
+    path(
+        "korrekturen/<int:korrektur_id>",
+        views.KorrekturBearbeitenView.as_view(),
+        name="korrektur_bearbeiten",
+    ),
+    path("fehlerliste/", views.fehler_list_view, name="fehlerliste"),
 ]

@@ -1,0 +1,9 @@
+<ul>
+{% for message in messages %}
+    <li>Nachricht vom {{ message.created_at }}</li>
+    <li>Status der Korrektur: {{ message.status }}
+    <li>Nachricht von: {% if message.sender == "01" %}{{ message.tutor }}{% elif message.sender == "02" %}{{ message.student }}{% endif %}
+    <li>Text: {{ message.text }}</li>
+    <hr />
+{% endfor %}
+</ul>
