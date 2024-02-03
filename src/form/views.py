@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
-import requests
+#import requests
 
 from form.forms import KorrekturForm
 from database.models import Kursmaterial, Messages
