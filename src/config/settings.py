@@ -23,7 +23,10 @@ DEBUG = bool(strtobool(os.getenv("DEBUG", "false")))
 
 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#std:setting-ALLOWED_HOSTS
-allowed_hosts = os.getenv("ALLOWED_HOSTS", ".localhost,127.0.0.1,[::1]")
+allowed_hosts = os.getenv(
+    "ALLOWED_HOSTS",
+    ".localhost,127.0.0.1,[::1],https://v2202401215072252949.happysrv.de",
+)
 ALLOWED_HOSTS = list(map(str.strip, allowed_hosts.split(",")))
 CSRF_TRUSTED_ORIGINS = ["https://v2202401215072252949.happysrv.de"]
 
@@ -39,11 +42,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "webhook",
-    "form"
+    "form",
 ]
 
 MIDDLEWARE = [
-    
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -117,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",  # noqa: E501
     },
 ]
-#LOGIN_REDIRECT_URL = '/'
+# LOGIN_REDIRECT_URL = '/'
 # Sessions
 # https://docs.djangoproject.com/en/4.2/ref/settings/#sessions
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
