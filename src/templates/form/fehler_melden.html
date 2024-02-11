@@ -7,8 +7,8 @@
 {% block head %}<script src="https://unpkg.com/htmx.org@1.9.2"></script>{% endblock head %}
 
 {% block content %}
-    <h1>Fehlermeldung in Lernunterlagen</h1>
-    <h2>Melden Sie einen Fehler</h2>
+    <h2 class="content-heading">Fehlermeldung in Lernunterlagen</h2>
+    <h4>Melden Sie einen Fehler</h4>
     <form method="post" id="korrekurForm">
         {% csrf_token %}
         {{ form.as_p }}
