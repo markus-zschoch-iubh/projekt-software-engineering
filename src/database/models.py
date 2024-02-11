@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
 from .enums import KursmaterialEnum, KorrekturstatusEnum
@@ -128,3 +129,15 @@ class Messages(models.Model):
     def __str__(self):
         return f"""Nachricht von {self.student}
             an {self.tutor} für {self.korrektur}"""
+    
+    def save(self):
+        if self.sender == "01":
+            send_mail(
+                "Änderung Ihrer Korrektureingabe",
+                "Es gibt Neuigkeiten zu Ihrer Korrektur.",
+                "projektsoftwareengineering.iubh@gmail.com",
+                [self.korrektur.ersteller.email],
+                fail_silently=False,
+            )
+            print(f"Mail sent to {self.korrektur.ersteller.email}")
+        return super().save()
