@@ -1,25 +1,134 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block page_title %}Korrekturmanagemensystem{% endblock %}</title>
+    <title>{% block page_title %}Korrekturmanagementsystem{% endblock %}</title>
     {% block styles %}
     <link rel="stylesheet" href="{% static "css/base.css" %}" />
     <link rel="stylesheet" href="{% static "css/form.css" %}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     {% endblock %}
     {% block head %}{% endblock head %}
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif; /* Hier kannst du die gewünschte Schriftart einstellen */
+            background-color: #f1f3f5; /* Hintergrundfarbe des Body */
+            display: flex;
+            justify-content: left; /* Zentriert den Container horizontal */
+            align-items: left; /* Zentriert den Container vertikal */
+            height: 100vh; /* Setzt die Höhe des Containers auf 100% der Viewport-Höhe */
+        }
+        #container {
+            display: grid;
+            grid-template-columns: 300px 1fr; /* Definiert zwei Spalten, die linke ist 300px breit */
+            gap: 20px; /* Abstand zwischen den Spalten */
+            max-width: 2000px; /* Maximalbreite des Containers */
+            margin: 1; /* Zentriert den Container horizontal */
+            height: 100%; /* Setzt die Höhe des Containers auf 100% der Viewport-Höhe */
+        }
+        #sidebar {
+            /* Stile für die linke Seitenleiste */
+            padding: 20px; /* Abstand innerhalb der Seitenleiste */
+            background-color: #3fa0dd; /* Helle blaue Farbe für die linke Spalte */
+            height: auto; /* Automatische Höhe basierend auf dem Inhalt */
+            display: flex; /* Verwendung von Flexbox für die Ausrichtung der Links */
+            flex-direction: column; /* Anordnung der Links in einer Spalte */
+            justify-content: flex-start; /* Ausrichtung der Links am oberen Rand */
+            align-items: center; /* Zentrierung der Links horizontal */
+        }
+        #content {
+            /* Stile für den Inhaltsbereich */
+            padding: 20px;
+        }
+        #sidebar nav ul {
+            list-style: none; /* Entfernt die Aufzählungspunkte */
+            padding: 0; /* Entfernt den Innenabstand */
+        }
+        #sidebar nav ul li {
+            margin-bottom: 20px; /* Fügt Abstand zwischen den einzelnen Links hinzu */
+            margin-top: 30px; /* Setzt den Abstand über den Links */
+        }
+        #sidebar nav ul li a {
+            color: #fff; /* Textfarbe der Links */
+            text-decoration: none; /* Entfernt die Unterstreichung der Links */
+            font-size: 20px; /* Vergrößert die Schriftgröße */
+            
+        }
+        .content-heading {
+            color: #3fa0dd; /* Blaue Farbe für Überschriften */
+            /* Weitere Stile für Überschriften können hier hinzugefügt werden */
+            margin-bottom: 50px; /* Abstand zwischen Überschrift und restlichem Text */
+        }
+
+        .name-text{
+            color: green; /* Beispiel: Textfarbe in Grün */
+            font-size: 20px;
+            
+        }
+        .small-text{
+            font-size: 12px;
+            line-height: 0.6
+        }
+        .spacer {
+            margin-bottom: 80px; /* Hier können Sie den gewünschten Abstand einstellen */
+        }
+        .spacer1 {
+            margin-bottom: 30px; /* Hier können Sie den gewünschten Abstand einstellen */
+
+        }
+    
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 12px;
+        text-align: left;
+    }
+
+    .custom-table thead th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .custom-table tbody tr:hover {
+        background-color: #f1f3f5;
+    }
+    
+ 
+    </style>
 </head>
 <body>
-    <div id="content">
-        {% block content %}{% endblock %}
+    <div id="container">
+        <div id="sidebar">
+            <!-- Hier kannst du Links oder andere Inhalte für die linke Seitenleiste einfügen -->
+            <nav>
+                <ul>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'student_dashboard' %}">Student Dashboard</a></li>
+                    <li><a href="{% url 'fehler_melden' %}">Einen Fehler melden</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <!-- Weitere Links hier einfügen -->
+                </ul>
+            </nav>
+        </div>
+        <div id="content">
+            {% block content %}
+            <!-- Hier wird der Seiteninhalt platziert -->
+            {% endblock %}
+        </div>
     </div>
 </body>
 </html>
-

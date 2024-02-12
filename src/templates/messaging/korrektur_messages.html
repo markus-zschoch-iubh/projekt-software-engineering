@@ -4,13 +4,13 @@
 
 {% block content %}
 
-<h3>Nachrichtenverlauf</h3>
+<h2 class="content-heading">Nachrichtenverlauf</h2>
 {% for message in messages %}
     <p>{{ message.student.vorname }}: {{ message.text }}</p>
 {% endfor %}
+<div class="spacer"></div>
 
-
-<h3>Neue Nachricht</h3>
+<h4>Neue Nachricht</h4>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

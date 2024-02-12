@@ -3,16 +3,18 @@
 {% block page_title %}Student Dashboard{% endblock %}
 
 {% block content %}
-    <h2>Student Dashboard</h2>
-    <p>Hallo {{vorname}} {{nachname}}!</p>
-    <p>E-Mail-Adresse des Benutzers: {{ email }}</p>
-    <p>Matrikelnummer des Benutzers: {{ matrikelnummer }} </p>
-    <p><a href="{% url 'fehler_melden' %}">Einen Fehler melden</a></p>
-    <P><a href="{% url 'logout' %}">Logout</a></P>
+    <h2 class="content-heading">Student Dashboard</h2>
+    <p>Hallo <span class="name-text">{{vorname}} {{nachname}}</span>!</p>
+    <p class = small-text>E-Mail-Adresse des Benutzers: {{ email }}</p>
+    <p class = small-text>Matrikelnummer des Benutzers: {{ matrikelnummer }} </p>
+    <div class="spacer"></div>
+      
 
     <h4>Meine gemeldeten Fehler:</h4>
+    <div class="spacer1"></div>
+
 {% if fehlermeldungen %}
-    <table style="table-layout: fixed; width: 100%;">
+    <table class="custom-table">
         <thead>
             <tr>
                 <th>Fehler Typ</th>
@@ -23,14 +25,15 @@
             </tr>
         </thead>
         <tbody>
-            {% for fehler in fehlermeldungen %}
-                <tr>
+            {% for fehler in fehlermeldungen %}   
+            <tr>
                     <td>{{ fehler.kursmaterial }}</td>
                     <td>{{ fehler.kurs }}</td>
                     <td>{{ fehler.aktuellerStatus }}</td>
                     <td>{{ fehler.beschreibung }}</td>
                     <td><a href="{% url 'korrektur_messages' korrektur_id=fehler.id %}">Nachrichten anzeigen</a></td>
                 </tr>
+        
             {% endfor %}
         </tbody>
     </table>

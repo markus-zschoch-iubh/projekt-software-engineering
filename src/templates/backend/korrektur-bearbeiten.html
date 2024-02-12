@@ -3,8 +3,8 @@
 {% block page_title %}Korrektur bearbeiten{% endblock page_title %}
 
 {% block content %}
-    <h1> Korrektur</h1>
-    <h2>Übersicht</h2>
+    <h2 class="content-heading"> Korrektur Übersicht</h2>
+    
     <p>
         <ul>
             <li>Ersteller: {{ korrektur.ersteller }}</li>
@@ -14,7 +14,9 @@
             <li>Aktueller Status: {{ korrektur.aktuellerStatus }}</li>
         </ul>
     </p>
-    <h2>Korrektur Verlauf & Kommunikation</h2>
+    <div class="spacer1"></div>
+    <h4>Korrektur Verlauf & Kommunikation</h4>
+    <div class="spacer1"></div>
     {% include "include/messaging.html" %}
     <form method="POST">
         {% csrf_token %}
