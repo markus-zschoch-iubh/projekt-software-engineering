@@ -132,9 +132,19 @@ class Messages(models.Model):
     
     def save(self):
         if self.sender == "01":
+            subject = "Änderung Ihrer Korrektureingabe"
+            previous_message = Messages.objects.all().order_by("-created_at")[0]
+            text = f"""
+                Es gibt Neuigkeiten zu deiner Korrektur.
+                Der Status ist: {self.get_status_display()}.
+                Dein Ticket wird bearbeitet von {self.tutor}.
+
+                Details findest du hier: http://localhost:8000/messaging/korrektur/{self.korrektur.pk}/messages/
+            """
+            print(previous_message)
             send_mail(
-                "Änderung Ihrer Korrektureingabe",
-                "Es gibt Neuigkeiten zu Ihrer Korrektur.",
+                subject,
+                text,
                 "projektsoftwareengineering.iubh@gmail.com",
                 [self.korrektur.ersteller.email],
                 fail_silently=False,
