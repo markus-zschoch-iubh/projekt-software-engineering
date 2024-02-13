@@ -1,13 +1,26 @@
-{% extends 'base.html' %}
+{% extends 'base_tutor.html' %}
 
 {% block page_title %}Messaging{% endblock %}
 
 {% block content %}
 
 <h2 class="content-heading">Nachrichtenverlauf</h2>
-{% for message in messages %}
-    <p>{{ message.student.vorname }}: {{ message.text }}</p>
-{% endfor %}
+<table class="custom-table">
+    <thead>
+        <tr>
+            <th>Absender</th>
+            <th>Nachricht</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+            <tr>
+                <td>{{ message.student.vorname }}</td>
+                <td>{{ message.text }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 <div class="spacer"></div>
 
 <h4>Neue Nachricht</h4>
