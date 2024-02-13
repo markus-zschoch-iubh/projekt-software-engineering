@@ -2,13 +2,15 @@
 
 {% load static %}
 
-{% block page_title %}Fehlermeldung in Lernunterlagen{% endblock %}
+{% block page_title %}Anregung für Lernunterlagen{% endblock %}
 
 {% block head %}<script src="https://unpkg.com/htmx.org@1.9.2"></script>{% endblock head %}
 
 {% block content %}
-    <h2 class="content-heading">Fehlermeldung in Lernunterlagen</h2>
-    <h4>Melden Sie einen Fehler</h4>
+    <h2 class="content-heading">Anregung für Lernunterlagen</h2>
+    <h4>Bringe hier deine Anregung ein oder </p>
+        melde auch einen Fehler in den Lernunterlagen</h4>
+    <div class=spacer></div>
     <form method="post" id="korrekurForm">
         {% csrf_token %}
         {{ form.as_p }}

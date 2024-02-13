@@ -1,0 +1,35 @@
+{% extends "base_tutor.html" %}
+
+{% block page_title%}Korrekturenübersicht{% endblock %}
+{% block content%}
+    <h2 class="content-heading">Offene Tickets</h2>
+        <ul>
+        {% for korrektur in korrekturen %}
+            <li>
+                <form method="post">
+                    {% csrf_token %}
+                    Meldung für Kurs {{ korrektur.kurs }},
+                    Kursmaterial {{ korrektur.kursmaterial }}.
+                    Ersteller: {{ korrektur.ersteller }}.
+                    Status: {{ korrektur.aktuellerStatus }}
+                    <input type="hidden" name="korrektur_id" value="{{ korrektur.id }}" />
+                    <button type="submit">Mir zuweisen</button>
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    <div class="spacer"></div> 
+    <h2>Meine Tickets</h2>
+    <div class="spacer1"></div>
+    <ul>
+        {% for korrektur in meine_korrekturen %}
+            <li>
+                Meldung für Kurs {{ korrektur.kurs }},
+                Kursmaterial {{ korrektur.kursmaterial }}.
+                Ersteller: {{ korrektur.ersteller }}.
+                Status: {{ korrektur.aktuellerStatus }}
+                <a href="/backend/korrekturen/{{ korrektur.id }}">Bearbeiten... </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock%}

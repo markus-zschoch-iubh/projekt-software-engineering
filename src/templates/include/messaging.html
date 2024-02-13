@@ -1,9 +1,26 @@
-<ul>
-{% for message in messages %}
-    <li>Nachricht vom {{ message.created_at }}</li>
-    <li>Status der Korrektur: {{ message.status }}
-    <li>Nachricht von: {% if message.sender == "01" %}{{ message.tutor }}{% elif message.sender == "02" %}{{ message.student }}{% endif %}
-    <li>Text: {{ message.text }}</li>
-    <hr />
-{% endfor %}
-</ul>
+<table class="custom-table">
+    <thead>
+        <tr>
+            <th>Nachricht vom</th>
+            <th>Status der Korrektur</th>
+            <th>Nachricht von</th>
+            <th>Text</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+            <tr>
+                <td>{{ message.created_at }}</td>
+                <td>{{ message.status }}</td>
+                <td>
+                    {% if message.sender == "01" %}
+                        {{ message.tutor }}
+                    {% elif message.sender == "02" %}
+                        {{ message.student }}
+                    {% endif %}
+                </td>
+                <td>{{ message.text }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

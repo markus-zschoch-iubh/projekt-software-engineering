@@ -581,10 +581,6 @@ video {
   position: static;
 }
 
-.fixed {
-  position: fixed;
-}
-
 .order-3 {
   order: 3;
 }

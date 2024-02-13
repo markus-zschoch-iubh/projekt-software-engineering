@@ -1,0 +1,30 @@
+{% extends "base_tutor.html" %}
+
+{% block page_title %}Ticket bearbeiten{% endblock page_title %}
+
+{% block content %}
+    <h2 class="content-heading"> Ticket Übersicht</h2>
+    
+    <p>
+        <ul>
+            <li>Ersteller: {{ korrektur.ersteller }}</li>
+            <li>Aktueller Bearbeiter: {{ korrektur.bearbeiter }}</li>
+            <li>Kurs: {{ korrektur.kurs }}</li>
+            <li>Kursmaterial: {{ korrektur.kursmaterial }}</li>
+            <li>Aktueller Status: {{ korrektur.aktuellerStatus }}</li>
+        </ul>
+    </p>
+
+    <div class="spacer1"></div>
+
+    
+    <h4>Ticket Verlauf & Kommunikation</h4>
+    
+    <div class="spacer1"></div>
+    {% include "include/messaging.html" %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Send</button>
+    </form>
+{% endblock content %}
