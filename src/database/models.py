@@ -1,7 +1,8 @@
-from django.core.mail import send_mail
 from django.db import models
 from django.utils import timezone
+
 from .enums import KursmaterialEnum, KorrekturstatusEnum
+from .helper import sende_email_an_studenten
 
 # Create your models here.
 
@@ -132,22 +133,6 @@ class Messages(models.Model):
     
     def save(self):
         if self.sender == "01":
-            subject = "Änderung Ihrer Korrektureingabe"
             previous_message = Messages.objects.all().order_by("-created_at")[0]
-            text = f"""
-                Es gibt Neuigkeiten zu deiner Korrektur.
-                Der Status ist: {self.get_status_display()}.
-                Dein Ticket wird bearbeitet von {self.tutor}.
-
-                Details findest du hier: http://localhost:8000/messaging/korrektur/{self.korrektur.pk}/messages/
-            """
-            print(previous_message)
-            send_mail(
-                subject,
-                text,
-                "projektsoftwareengineering.iubh@gmail.com",
-                [self.korrektur.ersteller.email],
-                fail_silently=False,
-            )
-            print(f"Mail sent to {self.korrektur.ersteller.email}")
+            sende_email_an_studenten(self, previous_message)
         return super().save()
