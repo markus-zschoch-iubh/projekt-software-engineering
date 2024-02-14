@@ -1,9 +1,6 @@
 {
-    "matrikelnummer": "123456789",
-    "vorname": "Max",
-    "nachname": "Mustermann",
-    "email": "mm@iu.de",
-    "kursabkuerzung": "ISSE01",
-    "medium": "druck",
-    "fehlerbeschreibung": "Fehlerbeschreibung 3"
+    "ersteller-email": "michael.hilfer@iubh-fernstudium.de",
+    "kurs": "ISEF01",
+    "kursmaterial": "04",
+    "beschreibung": "Fehler über Webhook gemeldet."
 }
