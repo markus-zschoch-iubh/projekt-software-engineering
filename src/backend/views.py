@@ -30,6 +30,7 @@ class KorrekturBearbeitenView(View):
     initial = {"key": "value"}
     template_name = "backend/korrektur-bearbeiten.html"
 
+
     @method_decorator(login_required)
     def get(self, request, korrektur_id):
         tutor = get_tutor(request)
@@ -48,7 +49,7 @@ class KorrekturBearbeitenView(View):
             message.status = message.get_status_display()
             # message.sender = message.get_sender_display()
 
-        form = self.form_class(initial=self.initial)
+        form = self.form_class(initial=self.initial, instance=korrektur)
 
         return render(
             request,
