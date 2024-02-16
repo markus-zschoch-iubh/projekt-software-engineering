@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
+
 from .enums import KursmaterialEnum, KorrekturstatusEnum
+from .helper import sende_email_an_studenten
 
 # Create your models here.
 
@@ -128,3 +130,9 @@ class Messages(models.Model):
     def __str__(self):
         return f"""Nachricht von {self.student}
             an {self.tutor} für {self.korrektur}"""
+    
+    def save(self):
+        if self.sender == "01":
+            previous_message = Messages.objects.all().order_by("-created_at")[0]
+            sende_email_an_studenten(self, previous_message)
+        return super().save()
