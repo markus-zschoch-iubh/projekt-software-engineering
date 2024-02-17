@@ -8,12 +8,6 @@ from database.models import Korrektur, Messages
 
 
 class MessagesForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
-        korrektur = kwargs.pop("instance")
-        self.fields["tutor"] = korrektur.bearbeiter
-        self.fields["status"] = korrektur.aktuellerStatus
-        
     
     class Meta:
         model = Messages

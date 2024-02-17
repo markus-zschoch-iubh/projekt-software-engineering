@@ -10,6 +10,16 @@ from database.models import Korrektur, Messages, Tutor
 
 # Helper functions
 
+def get_korrektur_status_enum(status):
+    if status == "Offen":
+        return "01"
+    if status == "In Bearbeitung":
+        return "02"
+    if status == "Umgesetzt":
+        return "03"
+    if status == "Abgelehnt":
+        return "02"
+
 
 def get_tutor(request):
     try:
@@ -48,8 +58,11 @@ class KorrekturBearbeitenView(View):
         for message in messages:
             message.status = message.get_status_display()
             # message.sender = message.get_sender_display()
-
-        form = self.form_class(initial=self.initial, instance=korrektur)
+        
+        form = self.form_class(initial={
+            "status": get_korrektur_status_enum(korrektur.aktuellerStatus),
+            "tutor": korrektur.bearbeiter,
+        })
 
         return render(
             request,
@@ -77,6 +90,8 @@ class KorrekturBearbeitenView(View):
 
         if form.is_valid():
             new_message = form.save(commit=False)
+            print(f"Aktueller Status: {new_message.status}")
+            print(f'"Korrektur Status: {korrektur.aktuellerStatus}')
             new_message.student = korrektur.ersteller
             new_message.korrektur = korrektur
             if new_message.tutor is None or new_message == "":
@@ -86,7 +101,7 @@ class KorrekturBearbeitenView(View):
             if new_message.tutor is not korrektur.bearbeiter:
                 new_message.aenderungTyp = "02"
                 korrektur.bearbeiter = new_message.tutor
-            if new_message.status is not korrektur.aktuellerStatus:
+            if new_message.status is not get_korrektur_status_enum(korrektur.aktuellerStatus):
                 new_message.aenderungTyp = "03"
                 korrektur.aktuellerStatus = new_message.status
             new_message.save()
