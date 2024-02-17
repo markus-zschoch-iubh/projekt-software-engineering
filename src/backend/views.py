@@ -78,8 +78,6 @@ class KorrekturBearbeitenView(View):
             new_message = form.save(commit=False)
             new_message.student = korrektur.ersteller
             new_message.korrektur = korrektur
-            if new_message.tutor is None or new_message == "":
-                new_message.tutor = korrektur.bearbeiter
             new_message.sender = "01"
             new_message.aenderungTyp = "04"
             if new_message.tutor is not korrektur.bearbeiter:
