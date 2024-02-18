@@ -1,19 +1,22 @@
 from django import forms
 from database.models import Messages
 
-# class MessageForm(forms.ModelForm):
-#     class Meta:
-#         model = Messages
-#         fields = ['text']
 
 class MessageForm(forms.ModelForm):
+    """
+    A form for creating a new message.
+
+    This form is used to create a new message by providing a text input field.
+
+    """
+
     class Meta:
         model = Messages
         fields = ['text']
+        labels = {'text': 'Neue Nachricht'}
         widgets = {
             'text': forms.Textarea(attrs={
-                'class': 'form-control',  # Bootstrap-Klasse für Stil
-                'placeholder': 'Geben Sie Ihre Nachricht ein',  # Platzhaltertext
-                'rows': 2,  # Höhe des Textfeldes
+                'placeholder': 'Geben Sie hier Ihre Nachricht an den Tutor ein.',
+                'rows': 2,  
             }),
         }

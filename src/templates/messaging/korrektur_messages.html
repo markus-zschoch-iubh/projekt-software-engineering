@@ -15,7 +15,13 @@
     <tbody>
         {% for message in messages %}
             <tr>
-                <td>{{ message.student.vorname }}</td>
+                <td>
+                {% if message.sender == "01" %}
+                    {{ message.tutor }}
+                {% elif message.sender == "02" %}
+                    {{ message.student.nachname }}, {{ message.student.vorname }}
+                {% endif %}
+                </td>
                 <td>{{ message.text }}</td>
             </tr>
         {% endfor %}
@@ -23,7 +29,6 @@
 </table>
 <div class="spacer"></div>
 
-<h4>Neue Nachricht</h4>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
