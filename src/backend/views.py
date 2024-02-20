@@ -4,49 +4,10 @@ from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views import View
 
+from .email import sende_email_an_studenten
 from .forms import MessagesForm
+from .helper import get_korrektur_status_enum, get_tutor
 from database.models import Korrektur, Messages, Tutor
-
-
-# Helper functions
-
-def get_korrektur_status_enum(status):
-    """
-    Converts the given status string to its corresponding enumeration value.
-    
-    Args:
-        status (str): The status string to be converted.
-        
-    Returns:
-        str: The enumeration value corresponding to the given status string.
-    """
-    if status == "Offen":
-        return "01"
-    if status == "In Bearbeitung":
-        return "02"
-    if status == "Umgesetzt":
-        return "03"
-    if status == "Abgelehnt":
-        return "02"
-
-
-def get_tutor(request):
-    """
-    Retrieve the tutor object associated with the given request user's email.
-
-    Args:
-        request (HttpRequest): The HTTP request object.
-
-    Returns:
-        Tutor: The tutor object associated with the request user's email, or None if not found.
-    """
-    try:
-        tutor = Tutor.objects.get(email=request.user.email)
-    except Exception as e:
-        print(e)
-        tutor = None
-
-    return tutor
 
 
 # Create your views here.
@@ -89,10 +50,12 @@ class KorrekturBearbeitenView(View):
             message.status = message.get_status_display()
             # message.sender = message.get_sender_display()
 
-        form = self.form_class(initial={
-            "status": get_korrektur_status_enum(korrektur.aktuellerStatus),
-            "tutor": korrektur.bearbeiter,
-        })
+        form = self.form_class(
+            initial={
+                "status": get_korrektur_status_enum(korrektur.aktuellerStatus),
+                "tutor": korrektur.bearbeiter,
+            }
+        )
 
         return render(
             request,
@@ -139,11 +102,17 @@ class KorrekturBearbeitenView(View):
             if new_message.tutor is not korrektur.bearbeiter:
                 new_message.aenderungTyp = "02"
                 korrektur.bearbeiter = new_message.tutor
-            if new_message.status is not get_korrektur_status_enum(korrektur.aktuellerStatus):
+            if new_message.status is not get_korrektur_status_enum(
+                korrektur.aktuellerStatus
+            ):
                 new_message.aenderungTyp = "03"
                 korrektur.aktuellerStatus = new_message.status
             new_message.save()
             korrektur.save()
+            previous_message = Messages.objects.filter(
+                korrektur=korrektur
+            ).order_by("-created_at")[0]
+            sende_email_an_studenten(request, new_message, previous_message)
             return redirect("/backend/tutor-index")
 
         messages = Messages.objects.filter(korrektur=korrektur).order_by(
@@ -174,7 +143,7 @@ def korrektur_bearbeiten(request, korrektur_id):
     Returns:
         HttpResponse: The HTTP response object.
     """
-    
+
     tutor = get_tutor(request)
     if tutor is None:
         return HttpResponseForbidden(
@@ -202,7 +171,8 @@ def tutor_index(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: The HTTP response object containing the rendered tutor index page.
+        HttpResponse: The HTTP response object containing the rendered tutor
+        index page.
     """
     tutor = get_tutor(request)
     if tutor is None:

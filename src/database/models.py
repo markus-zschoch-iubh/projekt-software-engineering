@@ -88,7 +88,7 @@ class Korrektur(models.Model):
     Meta:
         verbose_name_plural (str): The plural name for the model.
     """
-    
+
     ersteller = models.ForeignKey(
         Student, null=True, on_delete=models.SET_NULL
     )
@@ -145,15 +145,13 @@ class Messages(models.Model):
     class SenderENUM(models.TextChoices):
         """
         Enumeration class for sender types.
-        
+
         The SenderENUM class defines the available sender types for messages.
         Each sender type is represented by a code and a corresponding label.
         """
 
         TUTOR = "01", "Tutor"
         STUDENT = "02", "Student"
-
-    
 
     student = models.ForeignKey(
         Student,
@@ -193,17 +191,8 @@ class Messages(models.Model):
     def __str__(self):
         """
         Returns a string representation of the object.
-        
+
         The string includes the sender (student), recipient (tutor), and correction (korrektur) information.
         """
         return f"""Nachricht von {self.student}
             an {self.tutor} für {self.korrektur}"""
-    
-    def save(self):
-        """
-        Overrides the save method to send an email to the student if the sender is a tutor.
-        """
-        if self.sender == "01":
-            previous_message = Messages.objects.all().order_by("-created_at")[0]
-            sende_email_an_studenten(self, previous_message)
-        return super().save()
