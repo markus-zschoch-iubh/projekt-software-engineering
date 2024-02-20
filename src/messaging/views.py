@@ -7,10 +7,18 @@ from database.models import Student, Korrektur, Messages
 from django.urls import reverse
 
 
-# Studentenobjekt des aktuellen Benutzers erhalten
 def get_student(request):
+    """
+    Retrieves the student object based on the email of the authenticated user.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        Student: The student object corresponding to the email of the authenticated user.
+                Returns None if the student is not found or an exception occurs.
+    """
     try:
-        # Den Studenten anhand der E-Mail finden
         student = Student.objects.get(email=request.user.email)
     except Exception as e:
         print(e)
@@ -20,21 +28,46 @@ def get_student(request):
 
 
 def index(request):
+    """
+    This function handles the index page of the messaging portal.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+    
+    Returns:
+        HttpResponse: The HTTP response containing the message for the index page.
+    """
     return HttpResponse(
         "Hier entsteht das Messaging-Portal zum Austausch zwischen Studierenden und Tutoren."
     )
 
 
-# The Login View for the Tutors
 @login_required
 def tutor_dashboard(request):
+    """
+    Renders the tutor dashboard page.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        The rendered tutor dashboard page.
+    """
     return render(request, "messaging/tutor_dashboard.html")
 
 
-
-# Angepasstes Dashboard Student
 @login_required
 def student_dashboard(request):
+    """
+    Renders the student dashboard page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered student dashboard page.
+    """
+    
     user = request.user
     email = user.email
     vorname = user.first_name
@@ -45,9 +78,9 @@ def student_dashboard(request):
     print("---- Erfolgreicher Login von " + vorname + nachname + " ----")
    
     if matrikelnummer:
-        # Alle Fehlermeldungen für die gefundene Matrikelnummer abrufen
+        # Retrieve all error messages for the matriculation number found
         fehlermeldungen = Korrektur.objects.filter(ersteller=matrikelnummer)
-        # Umwandlung der Enum-Zahlenwerte in lesbare Bezeichnungen
+        # Conversion of enum numerical values into readable designations
         for fehlermeldung in fehlermeldungen:
             fehlermeldung.aktuellerStatus = (
                 fehlermeldung.get_aktuellerStatus_display()
@@ -67,14 +100,22 @@ def student_dashboard(request):
         },
     )
 
-#Userlogin von Django user
-# The logic for the custom Login View
+
 class CustomLoginView(LoginView):
-    
-     def get_success_url(self):
+    """
+    A custom login view that redirects users based on their group.
+
+    Overrides the `get_success_url` method to redirect users to different URLs
+    based on their group membership. If the user is a member of the 'Tutor' group,
+    they will be redirected to the 'tutor_index' URL. If the user is a member of
+    the 'Student' group, they will be redirected to the 'student_dashboard' URL.
+    If the user does not belong to any group, the default redirection URL will be used.
+    """
+
+    def get_success_url(self):
         user = self.request.user
 
-# Check user group and redirect accordingly
+        # Check user group and redirect accordingly
         if user.groups.filter(name='Tutor').exists():
             return reverse('tutor_index')
         elif user.groups.filter(name='Student').exists():
@@ -84,28 +125,25 @@ class CustomLoginView(LoginView):
         return super().get_success_url()
  
 
-
-
-# # The logic for the custom Login View
-# class CustomLoginView(LoginView):
-#     # Add custom logic if needed
-#     def form_valid(self, form):
-#         response = super().form_valid(form)
-#         # Check user group and redirect accordingly
-#         if self.request.user.groups.filter(name="Tutor").exists():
-#             return redirect("/backend/tutor_index")
-#         elif self.request.user.groups.filter(name="Student").exists():
-#             return redirect("student_dashboard")
-#         return response
-
-
-# The Class for the log out view
 class CustomLogoutView(LogoutView):
+    """
+    A custom view for logging out users.
+    """
     template_name = "registration/logout.html"
 
 
-# The Chat View for the Students
+@login_required
 def korrektur_messages(request, korrektur_id):
+    """
+    View function for displaying and handling messages related to a specific korrektur.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        korrektur_id (int): The ID of the korrektur.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered template.
+    """
     student = get_student(request)
     korrektur = Korrektur.objects.get(id=korrektur_id)
     messages = Messages.objects.filter(korrektur=korrektur).order_by(

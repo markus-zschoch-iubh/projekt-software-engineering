@@ -2,11 +2,19 @@ from django.db import models
 
 
 class KursstatusEnum(models.TextChoices):
+    """
+    Enum representing the status of a course.
+    """
+
     AKTIV = "01", "Aktiv"
     ABGESCHLOSSEN = "02", "Abgeschlossen"
 
 
 class KursmaterialEnum(models.TextChoices):
+    """
+    Enum class representing the different types of course materials.
+    """
+
     GEDRUCKTES_SKRIPT = "01", "Gedrucktes Skript"
     PDF_SKRIPT = "02", "PDF Skript"
     IU_LEARN_WEB = "03", "IU Learn (Web)"
@@ -21,6 +29,10 @@ class KursmaterialEnum(models.TextChoices):
 
 
 class KorrekturstatusEnum(models.TextChoices):
+    """
+    Enumeration class for the status of corrections.
+    """
+
     OFFEN = "01", "Offen"
     BEARBEITUNG = "02", "In Bearbeitung"
     UMGESETZT = "03", "Umgesetzt"

@@ -9,7 +9,6 @@ class MessageForm(forms.ModelForm):
     This form is used to create a new message by providing a text input field.
 
     """
-
     class Meta:
         model = Messages
         fields = ['text']

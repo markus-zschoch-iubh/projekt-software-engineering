@@ -1,11 +1,22 @@
 from django.core.mail import send_mail
 
 def sende_email_an_studenten(message, previous_message):
+    """
+    Sends an email to the student regarding changes in their correction input.
+
+    Args:
+        message (Message): The current message object.
+        previous_message (Message): The previous message object.
+
+    Returns:
+        bool: True if the email is sent successfully, False otherwise.
+    """
+    
     subject = "Änderung Ihrer Korrektureingabe"
     aenderung_tutor = True if message.tutor != previous_message.tutor else False
     aenderung_status = True if message.status != previous_message.status else False
     hat_nachricht = True if message.text is not None and len(message.text) > 0 else False
-    
+
     text = f"""
         Hallo {message.student.vorname},
         Es gibt Neuigkeiten zu deinem Ticket.

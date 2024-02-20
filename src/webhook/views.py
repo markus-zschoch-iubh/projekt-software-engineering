@@ -25,6 +25,7 @@ def get_student_from_json(key):
 
     return student
 
+
 def get_kurs_from_json(key):
     """
     Retrieves a Kurs object based on the provided key.
@@ -42,6 +43,7 @@ def get_kurs_from_json(key):
         kurs = None
 
     return kurs
+
 
 def get_kursmaterial_from_json(kurs, typ):
     """
@@ -61,6 +63,7 @@ def get_kursmaterial_from_json(kurs, typ):
         kursmaterial = None
 
     return kursmaterial
+
 
 @csrf_exempt
 @require_http_methods(["POST"])
