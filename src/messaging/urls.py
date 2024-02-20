@@ -1,6 +1,5 @@
 from django.urls import path
 from .views import index, CustomLoginView, tutor_dashboard, student_dashboard, korrektur_messages
-# from .views import form_valid
 
 
 urlpatterns = [

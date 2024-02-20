@@ -8,6 +8,5 @@ urlpatterns = [
         "korrekturen/<int:korrektur_id>",
         views.KorrekturBearbeitenView.as_view(),
         name="korrektur_bearbeiten",
-    ),
-    path("fehlerliste/", views.fehler_list_view, name="fehlerliste"),
+    )
 ]

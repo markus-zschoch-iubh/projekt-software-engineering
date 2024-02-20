@@ -11,6 +11,15 @@ from database.models import Korrektur, Messages, Tutor
 # Helper functions
 
 def get_korrektur_status_enum(status):
+    """
+    Converts the given status string to its corresponding enumeration value.
+    
+    Args:
+        status (str): The status string to be converted.
+        
+    Returns:
+        str: The enumeration value corresponding to the given status string.
+    """
     if status == "Offen":
         return "01"
     if status == "In Bearbeitung":
@@ -22,9 +31,17 @@ def get_korrektur_status_enum(status):
 
 
 def get_tutor(request):
+    """
+    Retrieve the tutor object associated with the given request user's email.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        Tutor: The tutor object associated with the request user's email, or None if not found.
+    """
     try:
         tutor = Tutor.objects.get(email=request.user.email)
-
     except Exception as e:
         print(e)
         tutor = None
@@ -36,13 +53,26 @@ def get_tutor(request):
 
 
 class KorrekturBearbeitenView(View):
+    """
+    View class for editing a correction.
+    """
+
     form_class = MessagesForm
     initial = {"key": "value"}
     template_name = "backend/korrektur-bearbeiten.html"
 
-
     @method_decorator(login_required)
     def get(self, request, korrektur_id):
+        """
+        Handles the GET request for editing a correction.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            korrektur_id (int): The ID of the correction to be edited.
+
+        Returns:
+            HttpResponse: The HTTP response object.
+        """
         tutor = get_tutor(request)
         if tutor is None:
             return HttpResponseForbidden(
@@ -58,7 +88,7 @@ class KorrekturBearbeitenView(View):
         for message in messages:
             message.status = message.get_status_display()
             # message.sender = message.get_sender_display()
-        
+
         form = self.form_class(initial={
             "status": get_korrektur_status_enum(korrektur.aktuellerStatus),
             "tutor": korrektur.bearbeiter,
@@ -77,6 +107,16 @@ class KorrekturBearbeitenView(View):
 
     @method_decorator(login_required)
     def post(self, request, korrektur_id):
+        """
+        Handles the POST request for editing a correction.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            korrektur_id (int): The ID of the correction to be edited.
+
+        Returns:
+            HttpResponse: The HTTP response object.
+        """
         tutor = get_tutor(request)
         if tutor is None:
             return HttpResponseForbidden(
@@ -124,6 +164,17 @@ class KorrekturBearbeitenView(View):
 
 @login_required
 def korrektur_bearbeiten(request, korrektur_id):
+    """
+    View function for editing a correction.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        korrektur_id (int): The ID of the correction to be edited.
+
+    Returns:
+        HttpResponse: The HTTP response object.
+    """
+    
     tutor = get_tutor(request)
     if tutor is None:
         return HttpResponseForbidden(
@@ -144,6 +195,15 @@ def korrektur_bearbeiten(request, korrektur_id):
 
 @login_required
 def tutor_index(request):
+    """
+    Renders the tutor index page with open corrections assigned to the tutor.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the rendered tutor index page.
+    """
     tutor = get_tutor(request)
     if tutor is None:
         return HttpResponseForbidden(
@@ -176,10 +236,3 @@ def tutor_index(request):
             "tutor": tutor,
         },
     )
-
-
-def fehler_list_view(request):
-    fehler = (
-        Korrektur.objects.all()
-    )  # Alle Einträge aus der Tabelle Fehlermeldung holen
-    return render(request, "backend/fehlerliste.html", {"fehler": fehler})

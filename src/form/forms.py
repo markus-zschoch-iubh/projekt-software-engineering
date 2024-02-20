@@ -4,7 +4,14 @@ from database.models import Kursmaterial, Korrektur
 
 
 class KorrekturForm(forms.ModelForm):
+    """
+    A form for creating a Korrektur object.
+    """
+
     class Meta:
+        """
+            Meta class for defining metadata options for the form.
+        """
         model = Korrektur
         fields = ["kurs", "kursmaterial", "beschreibung"]
         # Optional: Widgets hinzufügen, um die Darstellung der Formularfelder zu ändern
@@ -19,6 +26,16 @@ class KorrekturForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """
+        Initialize the form instance.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            None
+        """
         super().__init__(*args, **kwargs)
         self.fields["kursmaterial"].queryset = Kursmaterial.objects.none()
 

@@ -13,6 +13,10 @@ from .models import (
 
 
 class KorrekturAdmin(admin.ModelAdmin):
+    """
+    Admin class for managing Korrektur model in the database.
+    """
+
     list_display = (
         "ersteller",
         "kursmaterial",
@@ -27,6 +31,10 @@ class KorrekturAdmin(admin.ModelAdmin):
 
 
 class KursmaterialAdmin(admin.ModelAdmin):
+    """
+    Admin class for managing Kursmaterial objects.
+    """
+
     list_display = (
         "typ",
         "kurs",
