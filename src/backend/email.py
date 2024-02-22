@@ -16,7 +16,7 @@ def sende_email_an_studenten(request, message, previous_message):
     """
 
     this_tutor = get_tutor(request)
-    subject = "Änderung Ihrer Korrektureingabe"
+    subject = "Änderung zu deinem Ticket"
     aenderung_tutor = (
         True if message.tutor != previous_message.tutor else False
     )
@@ -76,7 +76,9 @@ def sende_email_an_studenten(request, message, previous_message):
     link_html = f"""
         <p>
         Details findest du
-        <a href=\"http://localhost:8000/messaging/korrektur/{message.korrektur.pk}/messages/\">
+        <a href=\"http://localhost:8000/messaging/korrektur/{
+            message.korrektur.pk
+        }/messages/\">
         hier...
         </a>
         </p>
