@@ -4,8 +4,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-from database.models import Korrektur,Student,Kurs,Kursmaterial
+from database.models import Korrektur, Student, Kurs, Kursmaterial
 from messaging.helper import ersteller_message_bei_neuer_korrektur
+
 
 def get_student_from_json(key):
     """
@@ -16,7 +17,7 @@ def get_student_from_json(key):
 
     Returns:
         Student or None: The student object if found, otherwise None.
-    """      
+    """
     try:
         student = Student.objects.get(email=key)
     except Exception as e:
@@ -69,7 +70,8 @@ def get_kursmaterial_from_json(kurs, typ):
 @require_http_methods(["POST"])
 def webhook(request):
     """
-    Handle incoming webhook requests. Creates new Korrektur objects based on the incoming JSON.
+    Handle incoming webhook requests. Creates new Korrektur objects
+    based on the incoming JSON.
 
     Args:
         request (HttpRequest): The incoming HTTP request.
@@ -86,7 +88,7 @@ def webhook(request):
         try:
             data = json.loads(request.body)
             print("Neue Meldung beim Webhook eingegangen: " + str(data))
-        
+
             # Save received JSON temporarily
             with open("webhook/inbox.json", "w", encoding="utf-8") as inbox:
                 json.dump(data, inbox, ensure_ascii=False, indent=4)
@@ -94,20 +96,26 @@ def webhook(request):
             # Find student by email
             student = get_student_from_json(data["ersteller-email"])
             print("Studentenobjekt des Senders: " + str(student))
-            
+
             # Check reported course and get course instance
             kurs = get_kurs_from_json(data["kurs"])
             print("Kursobjekt: " + str(kurs))
 
             # Check reported course material and get course material instance
-            kursmaterial = get_kursmaterial_from_json(kurs,data["kursmaterial"])
-            print("Kursmaterialobjekt: " + str(kursmaterial))            
+            kursmaterial = get_kursmaterial_from_json(
+                kurs, data["kursmaterial"]
+            )
+            print("Kursmaterialobjekt: " + str(kursmaterial))
 
             # Check if student, course or course material is not found
             if student is None or kurs is None or kursmaterial is None:
                 print("Student, Kurs oder Kursmaterial nicht gefunden")
                 return JsonResponse(
-                    {"error": "Student, Kurs oder Kursmaterial nicht gefunden"}, status=400
+                    {
+                        "error": """Student, Kurs oder
+                        Kursmaterial nicht gefunden"""
+                    },
+                    status=400,
                 )
 
             # Create Korrektur-object
@@ -122,7 +130,7 @@ def webhook(request):
 
             # Generate initial message upon creation of the correction
             ersteller_message_bei_neuer_korrektur(korrektur, student)
-                       
+
             return JsonResponse(
                 {"status": "Erfolgreich empfangen"}, status=200
             )

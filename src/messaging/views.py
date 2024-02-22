@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
@@ -15,8 +15,9 @@ def get_student(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        Student: The student object corresponding to the email of the authenticated user.
-                Returns None if the student is not found or an exception occurs.
+        Student: The student object corresponding to the email of the
+            authenticated user.
+        Returns None if the student is not found or an exception occurs.
     """
     try:
         student = Student.objects.get(email=request.user.email)
@@ -30,15 +31,17 @@ def get_student(request):
 def index(request):
     """
     This function handles the index page of the messaging portal.
-    
+
     Args:
         request (HttpRequest): The HTTP request object.
-    
+
     Returns:
-        HttpResponse: The HTTP response containing the message for the index page.
+        HttpResponse: The HTTP response containing the message for the
+        index page.
     """
     return HttpResponse(
-        "Hier entsteht das Messaging-Portal zum Austausch zwischen Studierenden und Tutoren."
+        """Hier entsteht das Messaging-Portal zum Austausch zwischen
+        Studierenden und Tutoren."""
     )
 
 
@@ -65,9 +68,10 @@ def student_dashboard(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: The HTTP response object containing the rendered student dashboard page.
+        HttpResponse: The HTTP response object containing the
+        rendered student dashboard page.
     """
-    
+
     user = request.user
     email = user.email
     vorname = user.first_name
@@ -76,7 +80,7 @@ def student_dashboard(request):
     matrikelnummer = student.martrikelnummer
 
     print("---- Erfolgreicher Login von " + vorname + nachname + " ----")
-   
+
     if matrikelnummer:
         # Retrieve all error messages for the matriculation number found
         fehlermeldungen = Korrektur.objects.filter(ersteller=matrikelnummer)
@@ -106,43 +110,47 @@ class CustomLoginView(LoginView):
     A custom login view that redirects users based on their group.
 
     Overrides the `get_success_url` method to redirect users to different URLs
-    based on their group membership. If the user is a member of the 'Tutor' group,
-    they will be redirected to the 'tutor_index' URL. If the user is a member of
-    the 'Student' group, they will be redirected to the 'student_dashboard' URL.
-    If the user does not belong to any group, the default redirection URL will be used.
+    based on their group membership. If the user is a member of the 'Tutor'
+    group, they will be redirected to the 'tutor_index' URL. If the user
+    is a member of the 'Student' group, they will be redirected to the
+    'student_dashboard' URL. If the user does not belong to any group,
+    the default redirection URL will be used.
     """
 
     def get_success_url(self):
         user = self.request.user
 
         # Check user group and redirect accordingly
-        if user.groups.filter(name='Tutor').exists():
-            return reverse('tutor_index')
-        elif user.groups.filter(name='Student').exists():
-            return reverse('student_dashboard')
+        if user.groups.filter(name="Tutor").exists():
+            return reverse("tutor_index")
+        elif user.groups.filter(name="Student").exists():
+            return reverse("student_dashboard")
 
         # Default redirection if no group is found
         return super().get_success_url()
- 
+
 
 class CustomLogoutView(LogoutView):
     """
     A custom view for logging out users.
     """
+
     template_name = "registration/logout.html"
 
 
 @login_required
 def korrektur_messages(request, korrektur_id):
     """
-    View function for displaying and handling messages related to a specific korrektur.
+    View function for displaying and handling messages related
+    to a specific korrektur.
 
     Args:
         request (HttpRequest): The HTTP request object.
         korrektur_id (int): The ID of the korrektur.
 
     Returns:
-        HttpResponse: The HTTP response object containing the rendered template.
+        HttpResponse: The HTTP response object containing the
+        rendered template.
     """
     student = get_student(request)
     korrektur = Korrektur.objects.get(id=korrektur_id)

@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 
 from form.forms import KorrekturForm
-from database.models import Kursmaterial, Messages
+from database.models import Kursmaterial
 from messaging.helper import ersteller_message_bei_neuer_korrektur
 from messaging.views import get_student
 
@@ -65,7 +65,8 @@ class FehlerMeldenView(View):
 
 def bestaetigungsseite_view(request):
     """
-    Renders the bestaetigung.html template and returns the rendered HTML as a response.
+    Renders the bestaetigung.html template and returns the rendered
+    HTML as a response.
 
     Args:
         request: The HTTP request object.
@@ -84,7 +85,8 @@ def load_kursmaterialien(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: The rendered HTML response containing the kursmaterialien options.
+        HttpResponse: The rendered HTML response containing the
+        kursmaterialien options.
     """
     kurs_id = request.GET.get("kurs")
     kursmaterialien = Kursmaterial.objects.filter(kurs_id=kurs_id)

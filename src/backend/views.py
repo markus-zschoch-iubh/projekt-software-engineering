@@ -7,7 +7,7 @@ from django.views import View
 from .email import sende_email_an_studenten
 from .forms import MessagesForm
 from .helper import get_korrektur_status_enum, get_tutor
-from database.models import Korrektur, Messages, Tutor
+from database.models import Korrektur, Messages
 
 
 # Create your views here.

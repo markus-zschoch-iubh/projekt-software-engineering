@@ -10,11 +10,11 @@ class KorrekturForm(forms.ModelForm):
 
     class Meta:
         """
-            Meta class for defining metadata options for the form.
+        Meta class for defining metadata options for the form.
         """
+
         model = Korrektur
         fields = ["kurs", "kursmaterial", "beschreibung"]
-        # Optional: Widgets hinzufügen, um die Darstellung der Formularfelder zu ändern
         widgets = {
             "beschreibung": forms.Textarea(attrs={"cols": 50, "rows": 10}),
             "kurs": forms.Select(

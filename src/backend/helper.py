@@ -29,7 +29,8 @@ def get_tutor(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        Tutor: The tutor object associated with the request user's email, or None if not found.
+        Tutor: The tutor object associated with the request user's email,
+        or None if not found.
     """
     try:
         tutor = Tutor.objects.get(email=request.user.email)
