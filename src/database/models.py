@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 
 from .enums import KursmaterialEnum, KorrekturstatusEnum
-from .helper import sende_email_an_studenten
 
 # Create your models here.
 
@@ -81,9 +80,9 @@ class Korrektur(models.Model):
         ersteller (ForeignKey): The student who created the correction.
         bearbeiter (ForeignKey): The tutor assigned to work on the correction.
         kurs (ForeignKey): The course associated with the correction.
-        kursmaterial (ForeignKey): The course material related to the correction.
-        aktuellerStatus (CharField): The current status of the correction.
-        beschreibung (TextField): The description of the error.
+        kursmaterial (ForeignKey): The course material related to the
+        correction. aktuellerStatus (CharField): The current status of
+        the correction. beschreibung (TextField): The description of the error.
 
     Meta:
         verbose_name_plural (str): The plural name for the model.
@@ -117,7 +116,8 @@ class Messages(models.Model):
     Represents a message in the system.
 
     Attributes:
-        AenderungTypENUM (Enum): Enumeration class representing different types of changes.
+        AenderungTypENUM (Enum): Enumeration class representing different
+        types of changes.
         SenderENUM (Enum): Enumeration class for sender types.
         student (ForeignKey): ForeignKey to the Student model.
         tutor (ForeignKey): ForeignKey to the Tutor model.
@@ -192,7 +192,8 @@ class Messages(models.Model):
         """
         Returns a string representation of the object.
 
-        The string includes the sender (student), recipient (tutor), and correction (korrektur) information.
+        The string includes the sender (student), recipient (tutor),
+        and correction (korrektur) information.
         """
         return f"""Nachricht von {self.student}
             an {self.tutor} für {self.korrektur}"""
