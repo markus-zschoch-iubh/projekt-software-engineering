@@ -71,12 +71,12 @@ def sende_email_an_studenten(request, message, previous_message):
 
     link = f"""
         Details findest du hier:
-        http://localhost:8000/messaging/korrektur/{message.korrektur.pk}/messages/
+        https://v2202401215072252949.happysrv.de/messaging/korrektur/{message.korrektur.pk}/messages/
     """
     link_html = f"""
         <p>
         Details findest du
-        <a href=\"http://localhost:8000/messaging/korrektur/{
+        <a href=\"https://v2202401215072252949.happysrv.de/messaging/korrektur/{
             message.korrektur.pk
         }/messages/\">
         hier...
